@@ -1,0 +1,2317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SovereignDesk | Autonomous Institutional Risk Copilot for Solo On-Chain Fund Managers</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-space: #07090E;
+      --bg-primary: #0F131C;
+      --bg-secondary: #141A26;
+      --bg-tertiary: #1A2232;
+      --bg-card: #161D2B;
+      --bg-surface: #1E2736;
+      --border-titanium: #2A364B;
+      --border-active: #3D4E6B;
+      --border-subtle: #1C2433;
+      
+      --text-white: #F1F5F9;
+      --text-primary: #E2E8F0;
+      --text-muted: #94A3B8;
+      --text-dim: #64748B;
+      --text-dark: #475569;
+
+      --accent-steel: #7DD3FC;
+      --accent-blue: #38BDF8;
+      --accent-slate: #8A98A8;
+      --status-ok: #10B981;
+      --status-warn: #F59E0B;
+      --status-crit: #EF4444;
+      --status-purple: #A855F7;
+
+      --mono-font: 'JetBrains Mono', monospace;
+      --sans-font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      background-color: var(--bg-space);
+      background-image: 
+        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(30, 42, 60, 0.4), transparent 70%),
+        linear-gradient(180deg, rgba(15, 19, 28, 0.8) 0%, rgba(7, 9, 14, 1) 100%);
+      color: var(--text-primary);
+      font-family: var(--sans-font);
+      font-size: 13px;
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    /* Chamfered clip paths */
+    .chamfer-sm {
+      clip-path: polygon(
+        0 4px, 4px 0, 
+        calc(100% - 4px) 0, 100% 4px, 
+        100% calc(100% - 4px), calc(100% - 4px) 100%, 
+        4px 100%, 0 calc(100% - 4px)
+      );
+    }
+
+    .chamfer-md {
+      clip-path: polygon(
+        0 8px, 8px 0, 
+        calc(100% - 8px) 0, 100% 8px, 
+        100% calc(100% - 8px), calc(100% - 8px) 100%, 
+        8px 100%, 0 calc(100% - 8px)
+      );
+    }
+
+    .chamfer-corner-tl {
+      clip-path: polygon(12px 0, 100% 0, 100% 100%, 0 100%, 0 12px);
+    }
+
+    .chamfer-corner-br {
+      clip-path: polygon(0 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%);
+    }
+
+    /* Header & Top Telemetry Bar */
+    .top-header {
+      background: var(--bg-primary);
+      border-bottom: 1px solid var(--border-titanium);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+    }
+
+    .header-inner {
+      max-width: 1680px;
+      margin: 0 auto;
+      padding: 10px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .brand-logo-badge {
+      background: linear-gradient(135deg, #1E2736 0%, #141A26 100%);
+      border: 1px solid var(--border-titanium);
+      color: var(--accent-steel);
+      font-family: var(--mono-font);
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      padding: 6px 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .brand-logo-badge .indicator-dot {
+      width: 7px;
+      height: 7px;
+      background: var(--status-ok);
+      border-radius: 50%;
+      box-shadow: 0 0 6px rgba(16, 185, 129, 0.6);
+    }
+
+    .brand-title {
+      font-size: 17px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--text-white);
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+    }
+
+    .brand-title span.sub {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-dim);
+      font-family: var(--mono-font);
+      letter-spacing: 0.05em;
+    }
+
+    .header-telemetry {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      font-family: var(--mono-font);
+      font-size: 11px;
+    }
+
+    .telemetry-item {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 2px;
+    }
+
+    .telemetry-label {
+      color: var(--text-dark);
+      font-size: 9px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .telemetry-value {
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .telemetry-value.live {
+      color: var(--accent-steel);
+    }
+
+    .telemetry-value.active {
+      color: var(--status-ok);
+    }
+
+    /* Primary Navigation Tabs */
+    .nav-tabs {
+      display: flex;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-subtle);
+      padding: 3px;
+      gap: 3px;
+    }
+
+    .nav-tab-btn {
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-muted);
+      font-family: var(--mono-font);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 7px 16px;
+      cursor: pointer;
+      letter-spacing: 0.04em;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .nav-tab-btn:hover {
+      color: var(--text-white);
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .nav-tab-btn.active {
+      background: var(--bg-surface);
+      color: var(--accent-steel);
+      border-color: var(--border-titanium);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    }
+
+    /* Global Container */
+    .main-container {
+      max-width: 1680px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 20px 24px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* KPI Summary Stat Rail */
+    .kpi-rail {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .kpi-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-titanium);
+      padding: 16px 20px;
+      position: relative;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    }
+
+    .kpi-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, var(--border-active) 0%, transparent 100%);
+    }
+
+    .kpi-card.alert::before {
+      background: linear-gradient(90deg, var(--status-crit) 0%, transparent 100%);
+    }
+
+    .kpi-card.warn::before {
+      background: linear-gradient(90deg, var(--status-warn) 0%, transparent 100%);
+    }
+
+    .kpi-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .kpi-tag {
+      font-family: var(--mono-font);
+      font-size: 10px;
+      color: var(--text-dim);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .kpi-indicator {
+      font-family: var(--mono-font);
+      font-size: 10px;
+      padding: 2px 6px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+    }
+
+    .kpi-indicator.ok {
+      color: var(--status-ok);
+      border-color: rgba(16, 185, 129, 0.3);
+      background: rgba(16, 185, 129, 0.05);
+    }
+
+    .kpi-indicator.live {
+      color: var(--accent-steel);
+      border-color: rgba(56, 189, 248, 0.3);
+      background: rgba(56, 189, 248, 0.05);
+    }
+
+    .kpi-indicator.breaker {
+      color: var(--status-crit);
+      border-color: rgba(239, 68, 68, 0.3);
+      background: rgba(239, 68, 68, 0.08);
+      font-weight: 700;
+    }
+
+    .kpi-value {
+      font-family: var(--mono-font);
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--text-white);
+      letter-spacing: -0.03em;
+      margin-bottom: 4px;
+    }
+
+    .kpi-subtext {
+      font-size: 11px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .kpi-subtext .delta-pos {
+      color: var(--status-ok);
+      font-family: var(--mono-font);
+    }
+
+    .kpi-subtext .delta-neg {
+      color: var(--status-crit);
+      font-family: var(--mono-font);
+    }
+
+    /* Content Layout Grids */
+    .tab-content {
+      display: none;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .tab-content.active {
+      display: flex;
+    }
+
+    .grid-2col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .grid-3col {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 20px;
+    }
+
+    .grid-split {
+      display: grid;
+      grid-template-columns: 2.2fr 1fr;
+      gap: 20px;
+    }
+
+    .grid-split-rev {
+      display: grid;
+      grid-template-columns: 1fr 2.2fr;
+      gap: 20px;
+    }
+
+    /* Panel Card */
+    .desk-panel {
+      background: var(--bg-card);
+      border: 1px solid var(--border-titanium);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .desk-panel-header {
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border-titanium);
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .panel-title-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .panel-icon-tag {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-titanium);
+      color: var(--accent-steel);
+      font-family: var(--mono-font);
+      font-size: 10px;
+      padding: 3px 6px;
+      font-weight: 600;
+    }
+
+    .panel-title {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      color: var(--text-white);
+      text-transform: uppercase;
+    }
+
+    .panel-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .desk-panel-body {
+      padding: 18px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* Form & Input Controls */
+    .ctrl-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .ctrl-label {
+      font-family: var(--mono-font);
+      font-size: 10px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .ctrl-label span.curr {
+      color: var(--accent-steel);
+      font-weight: 600;
+    }
+
+    .ctrl-slider {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 6px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-titanium);
+      outline: none;
+      cursor: pointer;
+    }
+
+    .ctrl-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      background: var(--accent-steel);
+      border: 2px solid var(--bg-space);
+      cursor: pointer;
+      clip-path: polygon(0 3px, 3px 0, calc(100% - 3px) 0, 100% 3px, 100% calc(100% - 3px), calc(100% - 3px) 100%, 3px 100%, 0 calc(100% - 3px));
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 6px;
+    }
+
+    .btn-pill {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-titanium);
+      color: var(--text-muted);
+      font-family: var(--mono-font);
+      font-size: 10px;
+      padding: 5px 10px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.15s ease;
+    }
+
+    .btn-pill:hover {
+      color: var(--text-white);
+      border-color: var(--border-active);
+    }
+
+    .btn-pill.active {
+      background: #253347;
+      color: var(--accent-steel);
+      border-color: var(--accent-steel);
+    }
+
+    /* Action Buttons */
+    .btn-action {
+      background: linear-gradient(180deg, #253347 0%, #1A2433 100%);
+      border: 1px solid var(--border-titanium);
+      color: var(--text-white);
+      font-family: var(--mono-font);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 10px 16px;
+      cursor: pointer;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.15s ease;
+    }
+
+    .btn-action:hover {
+      background: linear-gradient(180deg, #2E3E56 0%, #1E2B3E 100%);
+      border-color: var(--accent-steel);
+      color: var(--accent-steel);
+    }
+
+    .btn-action.btn-danger {
+      background: linear-gradient(180deg, #4A1A1E 0%, #2E1013 100%);
+      border-color: #6B2129;
+      color: #FCA5A5;
+    }
+
+    .btn-action.btn-danger:hover {
+      background: linear-gradient(180deg, #612127 0%, #3B1519 100%);
+      border-color: var(--status-crit);
+      color: var(--text-white);
+    }
+
+    .btn-action.btn-warn {
+      background: linear-gradient(180deg, #4A3515 0%, #2A1D0B 100%);
+      border-color: #784E18;
+      color: #FCD34D;
+    }
+
+    .btn-action.btn-warn:hover {
+      background: linear-gradient(180deg, #5C4119 0%, #36240E 100%);
+      border-color: var(--status-warn);
+      color: var(--text-white);
+    }
+
+    /* Canvas Charts */
+    .chart-container {
+      width: 100%;
+      height: 250px;
+      position: relative;
+      background: var(--bg-primary);
+      border: 1px solid var(--border-subtle);
+      overflow: hidden;
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .chart-overlay-info {
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      font-family: var(--mono-font);
+      font-size: 10px;
+      background: rgba(15, 19, 28, 0.85);
+      border: 1px solid var(--border-titanium);
+      padding: 6px 10px;
+      pointer-events: none;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    /* Mathematical Formula Box */
+    .formula-banner {
+      background: var(--bg-secondary);
+      border-left: 3px solid var(--accent-steel);
+      padding: 10px 14px;
+      font-family: var(--mono-font);
+      font-size: 11px;
+      color: var(--text-muted);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .formula-banner .eq {
+      color: var(--text-white);
+      font-weight: 600;
+      letter-spacing: 0.04em;
+    }
+
+    .formula-banner .note {
+      font-size: 10px;
+      color: var(--text-dim);
+    }
+
+    /* Grid Table */
+    .titanium-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: var(--mono-font);
+      font-size: 11px;
+    }
+
+    .titanium-table th {
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border-titanium);
+      color: var(--text-dim);
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 9px;
+      letter-spacing: 0.08em;
+      padding: 8px 12px;
+      text-align: left;
+    }
+
+    .titanium-table td {
+      padding: 9px 12px;
+      border-bottom: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+    }
+
+    .titanium-table tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+      color: var(--text-white);
+    }
+
+    .titanium-table td.numeric {
+      text-align: right;
+    }
+
+    .titanium-table th.numeric {
+      text-align: right;
+    }
+
+    /* Terminal Console */
+    .terminal-container {
+      background: #090C12;
+      border: 1px solid var(--border-titanium);
+      font-family: var(--mono-font);
+      font-size: 11px;
+      height: 220px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .terminal-header {
+      background: #111622;
+      border-bottom: 1px solid var(--border-titanium);
+      padding: 6px 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 10px;
+      color: var(--text-dim);
+    }
+
+    .terminal-body {
+      padding: 10px 14px;
+      overflow-y: auto;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      color: var(--text-muted);
+      line-height: 1.45;
+    }
+
+    .terminal-line {
+      display: flex;
+      gap: 10px;
+    }
+
+    .terminal-ts {
+      color: var(--text-dark);
+      flex-shrink: 0;
+    }
+
+    .terminal-src {
+      color: var(--accent-steel);
+      flex-shrink: 0;
+      font-weight: 500;
+    }
+
+    .terminal-msg {
+      word-break: break-all;
+    }
+
+    .terminal-msg.err {
+      color: var(--status-crit);
+    }
+
+    .terminal-msg.warn {
+      color: var(--status-warn);
+    }
+
+    .terminal-msg.ok {
+      color: var(--status-ok);
+    }
+
+    /* Circuit Breaker Visual HUD */
+    .breaker-matrix {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    .breaker-box {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-titanium);
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      position: relative;
+      transition: all 0.2s ease;
+    }
+
+    .breaker-box.tripped {
+      background: #2E1216;
+      border-color: var(--status-crit);
+    }
+
+    .breaker-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .breaker-name {
+      font-family: var(--mono-font);
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-white);
+      text-transform: uppercase;
+    }
+
+    .breaker-badge {
+      font-family: var(--mono-font);
+      font-size: 9px;
+      padding: 2px 5px;
+      font-weight: 700;
+    }
+
+    .breaker-badge.normal {
+      background: rgba(16, 185, 129, 0.1);
+      color: var(--status-ok);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .breaker-badge.tripped {
+      background: rgba(239, 68, 68, 0.2);
+      color: var(--status-crit);
+      border: 1px solid var(--status-crit);
+    }
+
+    .breaker-metric {
+      font-family: var(--mono-font);
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-white);
+    }
+
+    .breaker-limit {
+      font-family: var(--mono-font);
+      font-size: 10px;
+      color: var(--text-dim);
+    }
+
+    /* Footer */
+    .desk-footer {
+      background: var(--bg-primary);
+      border-top: 1px solid var(--border-titanium);
+      padding: 14px 24px;
+      font-family: var(--mono-font);
+      font-size: 10px;
+      color: var(--text-dim);
+    }
+
+    .footer-inner {
+      max-width: 1680px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .footer-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .footer-right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    /* Scrollbars */
+    ::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--bg-space);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--border-titanium);
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--border-active);
+    }
+
+    @media (max-width: 1200px) {
+      .kpi-rail { grid-template-columns: repeat(2, 1fr); }
+      .grid-split, .grid-split-rev, .grid-2col, .grid-3col { grid-template-columns: 1fr; }
+      .breaker-matrix { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 768px) {
+      .kpi-rail { grid-template-columns: 1fr; }
+      .breaker-matrix { grid-template-columns: 1fr; }
+      .header-telemetry { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation & Telemetry -->
+  <header class="top-header">
+    <div class="header-inner">
+      <div class="brand-group">
+        <div class="brand-logo-badge chamfer-sm">
+          <div class="indicator-dot"></div>
+          SOVEREIGN_DESK
+        </div>
+        <div class="brand-title">
+          SovereignDesk
+          <span class="sub">// ON-CHAIN RISK COPILOT</span>
+        </div>
+      </div>
+
+      <nav class="nav-tabs chamfer-sm">
+        <button class="nav-tab-btn active chamfer-sm" onclick="switchTab('tab-var')">[01] VAR RISK METER</button>
+        <button class="nav-tab-btn chamfer-sm" onclick="switchTab('tab-etf')">[02] SOSOVALUE ETF TRACKER</button>
+        <button class="nav-tab-btn chamfer-sm" onclick="switchTab('tab-depth')">[03] LIQUIDITY & TOXIC FLOW</button>
+        <button class="nav-tab-btn chamfer-sm" onclick="switchTab('tab-breaker')">[04] CIRCUIT BREAKER SIM</button>
+        <button class="nav-tab-btn chamfer-sm" onclick="switchTab('tab-solo')">[05] 1-PERSON BUSINESS</button>
+      </nav>
+
+      <div class="header-telemetry">
+        <div class="telemetry-item">
+          <span class="telemetry-label">API Feeds</span>
+          <span class="telemetry-value live">SoSoValue v1.4</span>
+        </div>
+        <div class="telemetry-item">
+          <span class="telemetry-label">Settlement L1</span>
+          <span class="telemetry-value">ValueChain Mainnet</span>
+        </div>
+        <div class="telemetry-item">
+          <span class="telemetry-label">Engine Latency</span>
+          <span class="telemetry-value active" id="hdr-latency">3.8 ms</span>
+        </div>
+        <div class="telemetry-item">
+          <span class="telemetry-label">Surveillance</span>
+          <span class="telemetry-value active">[ACTIVE]</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Space -->
+  <main class="main-container">
+
+    <!-- KPI Summary Stat Rail -->
+    <section class="kpi-rail">
+      <div class="kpi-card chamfer-sm">
+        <div class="kpi-meta">
+          <span class="kpi-tag">Managed Portfolio Equity</span>
+          <span class="kpi-indicator ok">VAULT ACTIVE</span>
+        </div>
+        <div class="kpi-value" id="kpi-aum">$25,000,000</div>
+        <div class="kpi-subtext">
+          <span>Solo Operator Allocation</span>
+          <span class="delta-pos">+4.2% 30d</span>
+        </div>
+      </div>
+
+      <div class="kpi-card chamfer-sm">
+        <div class="kpi-meta">
+          <span class="kpi-tag">Daily Parametric VaR (99.0%)</span>
+          <span class="kpi-indicator live">TITANIUM SLICE</span>
+        </div>
+        <div class="kpi-value" id="kpi-var">$412,850</div>
+        <div class="kpi-subtext">
+          <span id="kpi-var-pct">1.65%</span>
+          <span>Capital at 1-Day Risk Bound</span>
+        </div>
+      </div>
+
+      <div class="kpi-card chamfer-sm">
+        <div class="kpi-meta">
+          <span class="kpi-tag">SoSoValue ETF Beta Vector</span>
+          <span class="kpi-indicator live">IBIT / FBTC AGG</span>
+        </div>
+        <div class="kpi-value" id="kpi-etf-beta">+0.814</div>
+        <div class="kpi-subtext">
+          <span>Institutional Flow Sensitivity</span>
+          <span class="delta-pos">r = +0.79</span>
+        </div>
+      </div>
+
+      <div class="kpi-card chamfer-sm" id="kpi-card-breaker">
+        <div class="kpi-meta">
+          <span class="kpi-tag">Circuit Breaker Status</span>
+          <span class="kpi-indicator ok" id="kpi-breaker-ind">ARMED [3.0% HARD CAP]</span>
+        </div>
+        <div class="kpi-value" id="kpi-breaker-val">0.42% DD</div>
+        <div class="kpi-subtext">
+          <span>Max Allowed Drawdown: 3.00%</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 1: REAL-TIME VAR RISK METER & MONTE CARLO SIMULATOR -->
+    <section id="tab-var" class="tab-content active">
+      <div class="formula-banner chamfer-sm">
+        <div class="eq">PARAMETRIC VaR: VaR_alpha = -[mu * delta_t + Z_alpha * sigma * sqrt(delta_t)] * Equity_0</div>
+        <div class="note">Mehd AI Quantitative Risk Kernel | Fat-tail Student-t Expected Shortfall (CVaR) calibrated with SoSoValue volatility indices.</div>
+      </div>
+
+      <div class="grid-split">
+        <!-- Interactive Chart & Distribution -->
+        <div class="desk-panel chamfer-md">
+          <div class="desk-panel-header">
+            <div class="panel-title-group">
+              <span class="panel-icon-tag">[QUANT_DIST]</span>
+              <span class="panel-title">Monte Carlo PnL Distribution & Tail Risk Shortfall</span>
+            </div>
+            <div class="panel-controls">
+              <span class="kpi-tag">Distribution Model:</span>
+              <div class="btn-group">
+                <button class="btn-pill active" onclick="setDistModel('student_t', this)">Student-t (df=4)</button>
+                <button class="btn-pill" onclick="setDistModel('gaussian', this)">Gaussian (Normal)</button>
+              </div>
+            </div>
+          </div>
+          <div class="desk-panel-body">
+            <div class="chart-container chamfer-sm">
+              <canvas id="chartVarDist"></canvas>
+              <div class="chart-overlay-info chamfer-sm">
+                <div>VaR Threshold: <span id="overlay-var-cutoff" style="color:var(--status-crit)">-$412,850</span></div>
+                <div>Expected Shortfall (CVaR): <span id="overlay-cvar-val" style="color:var(--status-warn)">-$528,400</span></div>
+                <div>Tail Area Loss Probability: <span id="overlay-prob-val">1.00%</span></div>
+              </div>
+            </div>
+
+            <!-- Quantitative Risk Readout Grid -->
+            <div class="grid-3col">
+              <div class="breaker-box chamfer-sm">
+                <span class="breaker-limit">PARAMETRIC VaR (95.0%)</span>
+                <span class="breaker-metric" id="box-var-95">$287,500</span>
+                <span class="breaker-limit" id="box-var-95-pct">1.15% equity</span>
+              </div>
+              <div class="breaker-box chamfer-sm">
+                <span class="breaker-limit">PARAMETRIC VaR (99.0%)</span>
+                <span class="breaker-metric" id="box-var-99" style="color:var(--status-warn)">$412,850</span>
+                <span class="breaker-limit" id="box-var-99-pct">1.65% equity</span>
+              </div>
+              <div class="breaker-box chamfer-sm">
+                <span class="breaker-limit">EXPECTED SHORTFALL (CVaR 99%)</span>
+                <span class="breaker-metric" id="box-cvar-99" style="color:var(--status-crit)">$528,400</span>
+                <span class="breaker-limit" id="box-cvar-99-pct">2.11% equity</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Parametric Controls Sidebar -->
+        <div class="desk-panel chamfer-md">
+          <div class="desk-panel-header">
+            <div class="panel-title-group">
+              <span class="panel-icon-tag">[PARAMS]</span>
+              <span class="panel-title">Portfolio Risk Config</span>
+            </div>
+          </div>
+          <div class="desk-panel-body">
+            <!-- Portfolio Equity Slider -->
+            <div class="ctrl-group">
+              <label class="ctrl-label">
+                <span>Fund Portfolio Equity (USD)</span>
+                <span class="curr" id="disp-equity">$25,000,000</span>
+              </label>
+              <input type="range" class="ctrl-slider" id="slider-equity" min="1000000" max="100000000" step="500000" value="25000000" oninput="updateVarCalculations()">
+            </div>
+
+            <!-- Confidence Level -->
+            <div class="ctrl-group">
+              <label class="ctrl-label">
+                <span>Confidence Level (1 - Alpha)</span>
+                <span class="curr" id="disp-confidence">99.0% (Z = 2.326)</span>
+              </label>
+              <div class="btn-group">
+                <button class="btn-pill" onclick="setConfidence(0.95, this)">95.0%</button>
+                <button class="btn-pill" onclick="setConfidence(0.975, this)">97.5%</button>
+                <button class="btn-pill active" onclick="setConfidence(0.99, this)">99.0%</button>
+                <button class="btn-pill" onclick="setConfidence(0.999, this)">99.9%</button>
+              </div>
+            </div>
+
+            <!-- Holding Period -->
+            <div class="ctrl-group">
+              <label class="ctrl-label">
+                <span>Holding Period Horizon (Delta t)</span>
+                <span class="curr" id="disp-horizon">1-Day (24h)</span>
+              </label>
+              <div class="btn-group">
+                <button class="btn-pill active" onclick="setHorizon(1, this)">1-Day</button>
+                <button class="btn-pill" onclick="setHorizon(5, this)">5-Day</button>
+                <button class="btn-pill" onclick="setHorizon(10, this)">10-Day</button>
+                <button class="btn-pill" onclick="setHorizon(30, this)">30-Day</button>
+              </div>
+            </div>
+
+            <!-- Volatility Regime (SoSoValue Implied Vol) -->
+            <div class="ctrl-group">
+              <label class="ctrl-label">
+                <span>Volatility Regime (Annualized Sigma)</span>
+                <span class="curr" id="disp-vol">48.0% (Normal Crypto)</span>
+              </label>
+              <div class="btn-group">
+                <button class="btn-pill" onclick="setVolRegime(0.24, '24.0% (Low Vol)', this)">Low (24%)</button>
+                <button class="btn-pill active" onclick="setVolRegime(0.48, '48.0% (Normal)', this)">Norm (48%)</button>
+                <button class="btn-pill" onclick="setVolRegime(0.78, '78.0% (Elevated)', this)">High (78%)</button>
+                <button class="btn-pill" onclick="setVolRegime(1.35, '135.0% (Black Swan)', this)">Crisis (135%)</button>
+              </div>
+            </div>
+
+            <div class="formula-banner chamfer-sm" style="margin-top:auto;">
+              <div class="eq">MAX LOT SIZING GOVERNOR</div>
+              <div class="note">Current 1-Trade Lot Limit: <span id="ctrl-lot-limit" style="color:var(--text-white); font-weight:700">12.45 BTC</span> (Enforces strict 1.0% single-trade stop loss bound).</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: SOSOVALUE ETF TRACKER & INSTITUTIONAL CORRELATION -->
+    <section id="tab-etf" class="tab-content">
+      <div class="formula-banner chamfer-sm">
+        <div class="eq">INSTITUTIONAL ETF INFLOW BETA: Beta_ETF = Cov(R_OnChain, Delta_ETF) / Var(Delta_ETF) | r_Pearson = +0.814</div>
+        <div class="note">Direct telemetry ingestion from SoSoValue Spot ETF Data API (`/api/v1/etf/btc/inflow`). Solo fund managers adjust on-chain liquidity exposure before NY close based on institutional ETF delta anomalies.</div>
+      </div>
+
+      <div class="grid-split">
+        <!-- ETF Inflow Chart Panel -->
+        <div class="desk-panel chamfer-md">
+          <div class="desk-panel-header">
+            <div class="panel-title-group">
+              <span class="panel-icon-tag">[SOSOVALUE_FEED]</span>
+              <span class="panel-title">Spot Bitcoin ETF Daily Net Inflows & 7-Day Moving Avg</span>
+            </div>
+            <div class="panel-controls">
+              <div class="btn-group">
+                <button class="btn-pill active" onclick="setEtfAsset('BTC', this)">BTC Spot ETFs</button>
+                <button class="btn-pill" onclick="setEtfAsset('ETH', this)">ETH Spot ETFs</button>
+              </div>
+            </div>
+          </div>
+          <div class="desk-panel-body">
+            <div class="chart-container chamfer-sm" style="height: 280px;">
+              <canvas id="chartEtfInflows"></canvas>
+              <div class="chart-overlay-info chamfer-sm">
+                <div>Latest Daily Net: <span id="etf-latest-net" style="color:var(--status-ok)">+$458.2M</span></div>
+                <div>7-Day Mean Net: <span id="etf-7d-mean">+$284.1M</span></div>
+                <div>Cumulative Total: <span id="etf-cum-total" style="color:var(--accent-steel)">+$21.84B</span></div>
+              </div>
+            </div>
+
+            <div class="grid-3col">
+              <div class="breaker-box chamfer-sm">
+                <span class="breaker-limit">BLACKROCK (IBIT) FLOW</span>
+                <span class="breaker-metric delta-pos">+$289.4M</span>
+                <span class="breaker-limit">AUM: $29.8B (Issuer #1)</span>
+              </div>
+              <div class="breaker-box chamfer-sm">
+                <span class="breaker-limit">FIDELITY (FBTC) FLOW</span>
+                <span class="breaker-metric delta-pos">+$114.2M</span>
+                <span class="breaker-limit">AUM: $14.1B (Issuer #2)</span>
+              </div>
+              <div class="breaker-box chamfer-sm">
+                <span class="breaker-limit">GRAYSCALE (GBTC) FLOW</span>
+                <span class="breaker-metric delta-neg">-$18.6M</span>
+                <span class="breaker-limit">Outflow deceleration observed</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ETF Institutional Analytics & Signals -->
+        <div class="desk-panel chamfer-md">
+          <div class="desk-panel-header">
+            <div class="panel-title-group">
+              <span class="panel-icon-tag">[MOMENTUM_VECTOR]</span>
+              <span class="panel-title">Institutional Inflow Signals</span>
+            </div>
+          </div>
+          <div class="desk-panel-body">
+            <table class="titanium-table">
+              <thead>
+                <tr>
+                  <th>Signal Metric</th>
+                  <th class="numeric">Value</th>
+                  <th>Implication</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Rolling 30d Pearson r</td>
+                  <td class="numeric" style="color:var(--status-ok)">+0.814</td>
+                  <td>High Positive Co-movement</td>
+                </tr>
+                <tr>
+                  <td>Institutional Beta</td>
+                  <td class="numeric">1.24x</td>
+                  <td>Amplified on-chain beta</td>
+                </tr>
+                <tr>
+                  <td>Inflow Delta Anomaly</td>
+                  <td class="numeric" style="color:var(--accent-steel)">+1.82 sigma</td>
+                  <td>Institutional Accumulation</td>
+                </tr>
+                <tr>
+                  <td>SoSoValue SSI Score</td>
+                  <td class="numeric" style="color:var(--status-ok)">74 / 100</td>
+                  <td>Greed / Bullish Sentiment</td>
+                </tr>
+                <tr>
+                  <td>Auto-Rebalance Bias</td>
+                  <td class="numeric" style="color:var(--accent-steel)">+15% Long</td>
+                  <td>De-risk delta hedges</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div class="ctrl-group">
+              <span class="ctrl-label">
+                <span>SIMULATE SOSOVALUE INFLOW SHOCK</span>
+                <span class="curr" id="shock-label">Normal Flow</span>
+              </span>
+              <div class="btn-group">
+                <button class="btn-pill" onclick="simulateInflowShock(-500)">Outflow (-$500M)</button>
+                <button class="btn-pill" onclick="simulateInflowShock(0)">Baseline ($0M)</button>
+                <button class="btn-pill" onclick="simulateInflowShock(600)">Surge (+$600M)</button>
+              </div>
+            </div>
+
+            <div class="formula-banner chamfer-sm" style="margin-top:auto;">
+              <div class="eq">DELTA-GAMMA REBALANCING RULE</div>
+              <div class="note">When 3-day ETF net flow is negative for 2 consecutive days, SovereignDesk autonomously cuts on-chain leverage by 35% without requiring manual human intervention.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: LIQUIDITY DEPTH & TOXIC ORDER FLOW (MEHD AI DNA) -->
+    <section id="tab-depth" class="tab-content">
+      <div class="formula-banner chamfer-sm">
+        <div class="eq">KYLE'S LAMBDA SLIPPAGE ARMOR: Delta_P = lambda * Q + eta * (Q / tau)^alpha | VPIN TOXIC FLOW PROBABILITY: P(Toxic) = sum |V_B - V_S| / (2 * V * N)</div>
+        <div class="note">Mehd AI Microstructure Scanner applied to on-chain AMMs (Uniswap v3 / Curve) and ValueChain DEX liquidity pools to prevent MEV sandwich attacks and adverse selection.</div>
+      </div>
+
+      <div class="grid-split">
+        <!-- Order Book & Slippage Depth Chart -->
+        <div class="desk-panel chamfer-md">
+          <div class="desk-panel-header">
+            <div class="panel-title-group">
+              <span class="panel-icon-tag">[MICROSTRUCTURE]</span>
+              <span class="panel-title">Cumulative Bid/Ask Liquidity Depth & Slippage Bound</span>
+            </div>
+            <div class="panel-controls">
+              <span class="kpi-tag">Pool:</span>
+              <span class="panel-icon-tag" style="color:var(--accent-steel)">WBTC/USDC (0.05%)</span>
+            </div>
+          </div>
+          <div class="desk-panel-body">
+            <div class="chart-container chamfer-sm" style="height: 280px;">
+              <canvas id="chartDepth"></canvas>
+              <div class="chart-overlay-info chamfer-sm">
+                <div>Mid Price: <span style="color:var(--text-white)">$88,450.00</span></div>
+                <div>Bid Depth (+2%): <span style="color:var(--status-ok)">$18.4M</span></div>
+                <div>Ask Depth (-2%): <span style="color:var(--status-crit)">$16.9M</span></div>
+                <div>Order Book Imbalance (OBI): <span style="color:var(--accent-steel)">+0.042 (Balanced)</span></div>
+              </div>
+            </div>
+
+            <div class="grid-3col">
+              <div class="breaker-box chamfer-sm">
+                <span class="breaker-limit">VPIN TOXIC PROBABILITY</span>
+                <span class="breaker-metric" id="box-vpin-val" style="color:var(--status-ok)">0.184 (18.4%)</span>
+                <span class="breaker-limit">Toxic Flow Threshold: 0.450</span>
+              </div>
+              <div class="breaker-box chamfer-sm">
+                <span class="breaker-limit">KYLE'S LAMBDA (IMPACT)</span>
+                <span class="breaker-metric" id="box-lambda-val">0.0042 bps/$k</span>
+                <span class="breaker-limit">Linear Price Slippage Slope</span>
+              </div>
+              <div class="breaker-box chamfer-sm">
+                <span class="breaker-limit">RECOMMENDED TWAP SLICES</span>
+                <span class="breaker-metric" id="box-twap-slices" style="color:var(--accent-steel)">6 Slices / 18 min</span>
+                <span class="breaker-limit">Minimizes Almgren-Chriss cost</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slippage Armor Execution Engine -->
+        <div class="desk-panel chamfer-md">
+          <div class="desk-panel-header">
+            <div class="panel-title-group">
+              <span class="panel-icon-tag">[SLIPPAGE_ARMOR]</span>
+              <span class="panel-title">Order Execution Armor</span>
+            </div>
+          </div>
+          <div class="desk-panel-body">
+            <div class="ctrl-group">
+              <label class="ctrl-label">
+                <span>Target Order Size (USD)</span>
+                <span class="curr" id="disp-order-size">$1,500,000</span>
+              </label>
+              <input type="range" class="ctrl-slider" id="slider-order-size" min="100000" max="10000000" step="100000" value="1500000" oninput="updateExecutionSim()">
+            </div>
+
+            <div class="ctrl-group">
+              <label class="ctrl-label">
+                <span>Execution Urgency</span>
+                <span class="curr" id="disp-urgency">Adaptive (Passive Guard)</span>
+              </label>
+              <div class="btn-group">
+                <button class="btn-pill" onclick="setUrgency('passive', this)">Passive Limit</button>
+                <button class="btn-pill active" onclick="setUrgency('adaptive', this)">Adaptive TWAP</button>
+                <button class="btn-pill" onclick="setUrgency('fok', this)">Fill-or-Kill (FOK)</button>
+              </div>
+            </div>
+
+            <table class="titanium-table">
+              <tbody>
+                <tr>
+                  <td>Calculated Price Impact</td>
+                  <td class="numeric" id="sim-impact" style="color:var(--status-warn)">0.12% ($1,800)</td>
+                </tr>
+                <tr>
+                  <td>Max Allowed Slippage Bound</td>
+                  <td class="numeric" id="sim-bound">0.25% ($3,750)</td>
+                </tr>
+                <tr>
+                  <td>MEV Attack Probability</td>
+                  <td class="numeric" id="sim-mev" style="color:var(--status-ok)">2.1% (Low Risk)</td>
+                </tr>
+                <tr>
+                  <td>Optimal Slice Size</td>
+                  <td class="numeric" id="sim-slice">$250,000 / tranche</td>
+                </tr>
+                <tr>
+                  <td>Private RPC Routing</td>
+                  <td class="numeric" style="color:var(--status-ok)">ENABLED (Flashbots/Titan)</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <button class="btn-action chamfer-sm" onclick="runSimulatedExecution()">
+              EXECUTE SLIPPAGE-PROTECTED ORDER
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 4: AUTOMATED CIRCUIT BREAKER SIMULATOR -->
+    <section id="tab-breaker" class="tab-content">
+      <div class="formula-banner chamfer-sm">
+        <div class="eq">MAX DRAWDOWN CIRCUIT BREAKER: Delta_Loss_USD >= 0.03 * Balance_0 => HARD KILL SWITCH ENGAGED</div>
+        <div class="note">Autonomous risk governor trips in sub-millisecond execution when portfolio drawdown breaches sovereign bounds or when oracle price disparity exceeds 50 bps.</div>
+      </div>
+
+      <!-- Breaker State Matrix -->
+      <div class="breaker-matrix">
+        <div class="breaker-box chamfer-sm" id="brk-box-dd">
+          <div class="breaker-header">
+            <span class="breaker-name">Max Daily Drawdown</span>
+            <span class="breaker-badge normal" id="brk-badge-dd">NORMAL</span>
+          </div>
+          <div class="breaker-metric" id="brk-val-dd">0.42% / 3.00%</div>
+          <div class="breaker-limit">Current Loss: -$105,000 | Limit: -$750,000</div>
+        </div>
+
+        <div class="breaker-box chamfer-sm" id="brk-box-vol">
+          <div class="breaker-header">
+            <span class="breaker-name">Volatility Spike Guard</span>
+            <span class="breaker-badge normal" id="brk-badge-vol">NORMAL</span>
+          </div>
+          <div class="breaker-metric" id="brk-val-vol">18.4 pips/min</div>
+          <div class="breaker-limit">Spike Tripwire: &gt; 50.0 pips / 60 sec</div>
+        </div>
+
+        <div class="breaker-box chamfer-sm" id="brk-box-oracle">
+          <div class="breaker-header">
+            <span class="breaker-name">Oracle Dislocation</span>
+            <span class="breaker-badge normal" id="brk-badge-oracle">NORMAL</span>
+          </div>
+          <div class="breaker-metric" id="brk-val-oracle">0.03% (2.6 bps)</div>
+          <div class="breaker-limit">Tripwire: SoSoValue vs On-Chain &gt; 40 bps</div>
+        </div>
+
+        <div class="breaker-box chamfer-sm" id="brk-box-toxic">
+          <div class="breaker-header">
+            <span class="breaker-name">Toxic MEV / Spread Radar</span>
+            <span class="breaker-badge normal" id="brk-badge-toxic">NORMAL</span>
+          </div>
+          <div class="breaker-metric" id="brk-val-toxic">VPIN: 0.184</div>
+          <div class="breaker-limit">Tripwire: VPIN &gt; 0.450 or Spread &gt; 8 pips</div>
+        </div>
+      </div>
+
+      <!-- Interactive Scenario Injection & Real-Time Console -->
+      <div class="grid-split">
+        <div class="desk-panel chamfer-md">
+          <div class="desk-panel-header">
+            <div class="panel-title-group">
+              <span class="panel-icon-tag">[AUDIT_LOG]</span>
+              <span class="panel-title">Real-Time Risk Kernel Telemetry Log</span>
+            </div>
+            <div class="panel-controls">
+              <button class="btn-pill" onclick="clearTerminalLogs()">Clear Feed</button>
+            </div>
+          </div>
+          <div class="desk-panel-body" style="padding:0;">
+            <div class="terminal-container">
+              <div class="terminal-header">
+                <span>LOG_BUFFER: 512 KB | AES-256 SIGNED</span>
+                <span>STATUS: STREAMING</span>
+              </div>
+              <div class="terminal-body" id="terminal-feed">
+                <!-- Log items rendered dynamically -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stress Scenario Triggers -->
+        <div class="desk-panel chamfer-md">
+          <div class="desk-panel-header">
+            <div class="panel-title-group">
+              <span class="panel-icon-tag">[STRESS_TEST]</span>
+              <span class="panel-title">Black Swan Injection Simulator</span>
+            </div>
+          </div>
+          <div class="desk-panel-body">
+            <p style="color:var(--text-muted); font-size:11px;">
+              Trigger simulated black swan shocks to evaluate SovereignDesk's automated circuit breakers and kill-switch reactions:
+            </p>
+
+            <button class="btn-action btn-danger chamfer-sm" onclick="triggerScenario('flash_crash')">
+              [SHOCK 1] FLASH CRASH (-12% CASCADE SPIKE)
+            </button>
+
+            <button class="btn-action btn-warn chamfer-sm" onclick="triggerScenario('etf_crunch')">
+              [SHOCK 2] ETF LIQUIDITY CRUNCH (-$680M OUTFLOW)
+            </button>
+
+            <button class="btn-action btn-danger chamfer-sm" onclick="triggerScenario('oracle_divergence')">
+              [SHOCK 3] ORACLE DISLOCATION (120 BPS GAP)
+            </button>
+
+            <button class="btn-action btn-warn chamfer-sm" onclick="triggerScenario('toxic_swarm')">
+              [SHOCK 4] TOXIC MEV SWARM (VPIN 0.62)
+            </button>
+
+            <button class="btn-action chamfer-sm" style="margin-top:auto;" onclick="resetAllBreakers()">
+              [RESET] RESTORE ALL GOVERNORS TO NORMAL
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 5: 1-PERSON BUSINESS BLUEPRINT & UNIT ECONOMICS -->
+    <section id="tab-solo" class="tab-content">
+      <div class="formula-banner chamfer-sm">
+        <div class="eq">SOLO ON-CHAIN FUND ECONOMICS: ARR = AUM * 2.0% Mgmt Fee + Excess_Alpha * 20.0% Performance Fee</div>
+        <div class="note">A single quantitative fund manager operates an institutional $25M AUM on-chain strategy with zero headcount, leveraging SovereignDesk as autonomous Chief Risk Officer and Execution Desk.</div>
+      </div>
+
+      <div class="grid-3col">
+        <!-- Card 1: Autonomous Workflow -->
+        <div class="desk-panel chamfer-md">
+          <div class="desk-panel-header">
+            <div class="panel-title-group">
+              <span class="panel-icon-tag">[WORKFLOW]</span>
+              <span class="panel-title">Autonomous Stack</span>
+            </div>
+          </div>
+          <div class="desk-panel-body">
+            <table class="titanium-table">
+              <tbody>
+                <tr>
+                  <td>Macro Data</td>
+                  <td>SoSoValue Spot ETF & SSI API</td>
+                </tr>
+                <tr>
+                  <td>Risk Engine</td>
+                  <td>Mehd AI Fast Risk Kernel (C++/Rust)</td>
+                </tr>
+                <tr>
+                  <td>Settlement L1</td>
+                  <td>ValueChain Smart Vaults</td>
+                </tr>
+                <tr>
+                  <td>Middle-Office</td>
+                  <td>100% Autonomous (Zero Analysts)</td>
+                </tr>
+                <tr>
+                  <td>Surveillance</td>
+                  <td>Continuous 24/7/365 Sub-ms Daemons</td>
+                </tr>
+                <tr>
+                  <td>Audit Trail</td>
+                  <td>Cryptographically sealed on-chain</td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="formula-banner chamfer-sm">
+              <div class="eq">Zero Human Latency</div>
+              <div class="note">Circuit breakers fire in under 4ms when risk thresholds are breached.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2: Financial Model & Revenue -->
+        <div class="desk-panel chamfer-md">
+          <div class="desk-panel-header">
+            <div class="panel-title-group">
+              <span class="panel-icon-tag">[ECONOMICS]</span>
+              <span class="panel-title">Solo Unit Economics</span>
+            </div>
+          </div>
+          <div class="desk-panel-body">
+            <table class="titanium-table">
+              <tbody>
+                <tr>
+                  <td>AUM Scale</td>
+                  <td class="numeric">$25,000,000 USD</td>
+                </tr>
+                <tr>
+                  <td>2.0% Mgmt Fee</td>
+                  <td class="numeric" style="color:var(--status-ok)">$500,000 / yr</td>
+                </tr>
+                <tr>
+                  <td>Target Alpha Return</td>
+                  <td class="numeric">+18.5% Net</td>
+                </tr>
+                <tr>
+                  <td>20% Performance Fee</td>
+                  <td class="numeric" style="color:var(--status-ok)">$925,000 / yr</td>
+                </tr>
+                <tr>
+                  <td>Gross Solo Operator ARR</td>
+                  <td class="numeric" style="color:var(--accent-steel); font-weight:700;">$1,425,000 USD</td>
+                </tr>
+                <tr>
+                  <td>Operating Infrastructure</td>
+                  <td class="numeric">-$14,500 / yr (0.05%)</td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="formula-banner chamfer-sm">
+              <div class="eq">98.9% Net Operating Margin</div>
+              <div class="note">Scales up to $100M AUM with identical zero-headcount operational footprint.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3: SoSoValue API Endpoints -->
+        <div class="desk-panel chamfer-md">
+          <div class="desk-panel-header">
+            <div class="panel-title-group">
+              <span class="panel-icon-tag">[API_INTEGRATION]</span>
+              <span class="panel-title">Live API Schemas</span>
+            </div>
+          </div>
+          <div class="desk-panel-body">
+            <div class="ctrl-group">
+              <label class="ctrl-label">
+                <span>Active Endpoint</span>
+                <span class="curr" id="disp-api-ep">/v1/etf/btc/inflow</span>
+              </label>
+              <div class="btn-group">
+                <button class="btn-pill active" onclick="showApiPayload('btc_etf', this)">BTC ETF</button>
+                <button class="btn-pill" onclick="showApiPayload('eth_etf', this)">ETH ETF</button>
+                <button class="btn-pill" onclick="showApiPayload('ssi_idx', this)">SSI Index</button>
+              </div>
+            </div>
+
+            <div style="background:#090C12; border:1px solid var(--border-subtle); padding:10px; font-family:var(--mono-font); font-size:10px; color:var(--text-muted); height:160px; overflow-y:auto;" id="api-payload-box">
+              {
+                "status": 200,
+                "endpoint": "api.sosovalue.com/api/v1/etf/btc/inflow",
+                "timestamp": "2026-11-10T19:20:00Z",
+                "total_net_inflow_usd": 458200000,
+                "cumulative_net_inflow_usd": 21840000000,
+                "issuers": {
+                  "IBIT": 289400000,
+                  "FBTC": 114200000,
+                  "BITB": 32100000,
+                  "ARKB": 41100000,
+                  "GBTC": -18600000
+                },
+                "anomaly_z_score": 1.82,
+                "onchain_beta_estimate": 0.814
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Global Monospaced Footer -->
+  <footer class="desk-footer">
+    <div class="footer-inner">
+      <div class="footer-left">
+        <span>SOVEREIGN_DESK // QUANTITATIVE RISK COPILOT</span>
+        <span>AEROSPACE TITANIUM ARCHITECTURE</span>
+        <span>MEHD AI NATIVE QUANT ENGINE COMPATIBLE</span>
+      </div>
+      <div class="footer-right">
+        <span>BUILT FOR: SoSoValue "One-Person On-Chain Finance Business" Buildathon (Akindo)</span>
+        <span>STATUS: SYSTEM SECURE</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Interactive JavaScript Engine -->
+  <script>
+    /* State Management */
+    const state = {
+      equity: 25000000,
+      confidence: 0.99,
+      zScore: 2.326,
+      horizonDays: 1,
+      volRegime: 0.48,
+      distModel: 'student_t',
+      etfAsset: 'BTC',
+      orderSize: 1500000,
+      urgency: 'adaptive',
+      
+      // Circuit Breaker Statuses
+      drawdownCurrentPct: 0.42,
+      volSpikePips: 18.4,
+      oracleDislocationBps: 2.6,
+      vpinToxicity: 0.184,
+      isTripped: false,
+
+      // Live simulated logs
+      logs: []
+    };
+
+    /* Initialize on DOM Load */
+    document.addEventListener('DOMContentLoaded', () => {
+      initCharts();
+      updateVarCalculations();
+      updateExecutionSim();
+      initLogs();
+      startTelemetryHeartbeat();
+    });
+
+    /* Tab Switcher */
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+      document.querySelectorAll('.nav-tab-btn').forEach(btn => btn.classList.remove('active'));
+      
+      const target = document.getElementById(tabId);
+      if (target) target.classList.add('active');
+
+      const tabs = ['tab-var', 'tab-etf', 'tab-depth', 'tab-breaker', 'tab-solo'];
+      const index = tabs.indexOf(tabId);
+      if (index >= 0) {
+        document.querySelectorAll('.nav-tab-btn')[index].classList.add('active');
+      }
+
+      // Re-render relevant charts when tab becomes visible
+      if (tabId === 'tab-var') renderVarDistributionChart();
+      if (tabId === 'tab-etf') renderEtfChart();
+      if (tabId === 'tab-depth') renderDepthChart();
+    }
+
+    /* Math Formulas */
+    function calculateParametricVar(equity, z, vol, days) {
+      const deltaT = days / 365.0;
+      const sigmaDelta = vol * Math.sqrt(deltaT);
+      // Daily drift mu approximated near 0 for conservative quant risk
+      const varPct = z * sigmaDelta;
+      const varDollar = equity * varPct;
+      return { varPct, varDollar };
+    }
+
+    function calculateCVar(equity, z, vol, days, dist) {
+      // Expected Shortfall for Student-t or Gaussian
+      const { varDollar, varPct } = calculateParametricVar(equity, z, vol, days);
+      const tailMultiplier = (dist === 'student_t') ? 1.28 : 1.15;
+      const cvarDollar = varDollar * tailMultiplier;
+      const cvarPct = varPct * tailMultiplier;
+      return { cvarDollar, cvarPct };
+    }
+
+    function updateVarCalculations() {
+      const sliderVal = parseFloat(document.getElementById('slider-equity').value);
+      state.equity = sliderVal;
+      document.getElementById('disp-equity').textContent = formatUSD(state.equity);
+      document.getElementById('kpi-aum').textContent = formatUSD(state.equity);
+
+      const { varDollar: var95, varPct: var95Pct } = calculateParametricVar(state.equity, 1.645, state.volRegime, state.horizonDays);
+      const { varDollar: varCurr, varPct: varCurrPct } = calculateParametricVar(state.equity, state.zScore, state.volRegime, state.horizonDays);
+      const { cvarDollar, cvarPct } = calculateCVar(state.equity, state.zScore, state.volRegime, state.horizonDays, state.distModel);
+
+      // Update KPI
+      document.getElementById('kpi-var').textContent = formatUSD(varCurr);
+      document.getElementById('kpi-var-pct').textContent = (varCurrPct * 100).toFixed(2) + '%';
+
+      // Update Grid Boxes
+      document.getElementById('box-var-95').textContent = formatUSD(var95);
+      document.getElementById('box-var-95-pct').textContent = (var95Pct * 100).toFixed(2) + '% equity';
+
+      document.getElementById('box-var-99').textContent = formatUSD(varCurr);
+      document.getElementById('box-var-99-pct').textContent = (varCurrPct * 100).toFixed(2) + '% equity';
+
+      document.getElementById('box-cvar-99').textContent = formatUSD(cvarDollar);
+      document.getElementById('box-cvar-99-pct').textContent = (cvarPct * 100).toFixed(2) + '% equity';
+
+      // Update Chart Overlay
+      document.getElementById('overlay-var-cutoff').textContent = '-' + formatUSD(varCurr);
+      document.getElementById('overlay-cvar-val').textContent = '-' + formatUSD(cvarDollar);
+      document.getElementById('overlay-prob-val').textContent = ((1 - state.confidence) * 100).toFixed(2) + '%';
+
+      // Lot Sizing Governor: Max 1% single-trade stop loss at 25 pips (or 1.5% distance)
+      const maxLossDollar = state.equity * 0.01;
+      const btcPrice = 88450.0;
+      const slDistancePct = 0.02; // 2% SL
+      const maxLotBtc = (maxLossDollar / (btcPrice * slDistancePct)).toFixed(2);
+      document.getElementById('ctrl-lot-limit').textContent = maxLotBtc + ' BTC';
+
+      renderVarDistributionChart();
+    }
+
+    function setConfidence(conf, btn) {
+      state.confidence = conf;
+      if (conf === 0.95) state.zScore = 1.645;
+      else if (conf === 0.975) state.zScore = 1.960;
+      else if (conf === 0.99) state.zScore = 2.326;
+      else if (conf === 0.999) state.zScore = 3.090;
+
+      document.getElementById('disp-confidence').textContent = (conf * 100).toFixed(1) + `% (Z = ${state.zScore})`;
+      btn.parentElement.querySelectorAll('.btn-pill').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      updateVarCalculations();
+    }
+
+    function setHorizon(days, btn) {
+      state.horizonDays = days;
+      document.getElementById('disp-horizon').textContent = `${days}-Day (${days * 24}h)`;
+      btn.parentElement.querySelectorAll('.btn-pill').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      updateVarCalculations();
+    }
+
+    function setVolRegime(vol, label, btn) {
+      state.volRegime = vol;
+      document.getElementById('disp-vol').textContent = label;
+      btn.parentElement.querySelectorAll('.btn-pill').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      updateVarCalculations();
+    }
+
+    function setDistModel(model, btn) {
+      state.distModel = model;
+      btn.parentElement.querySelectorAll('.btn-pill').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      updateVarCalculations();
+    }
+
+    /* Tab 3: Slippage Armor & Execution Calculations */
+    function updateExecutionSim() {
+      const orderSize = parseFloat(document.getElementById('slider-order-size').value);
+      state.orderSize = orderSize;
+      document.getElementById('disp-order-size').textContent = formatUSD(orderSize);
+
+      // Kyle's lambda impact calculation: impact = lambda * orderSize
+      const lambda = 0.00000008; // Impact coefficient
+      const impactPct = (orderSize * lambda * 100);
+      const impactDollar = orderSize * (impactPct / 100);
+      
+      const slippageBoundPct = Math.min(0.50, impactPct * 1.8);
+      const slippageBoundDollar = orderSize * (slippageBoundPct / 100);
+
+      document.getElementById('sim-impact').textContent = impactPct.toFixed(3) + '% (' + formatUSD(impactDollar) + ')';
+      document.getElementById('sim-bound').textContent = slippageBoundPct.toFixed(3) + '% (' + formatUSD(slippageBoundDollar) + ')';
+
+      // Slices calculation
+      const sliceCount = Math.max(2, Math.ceil(orderSize / 250000));
+      const sliceSize = (orderSize / sliceCount);
+      document.getElementById('box-twap-slices').textContent = `${sliceCount} Slices / ${sliceCount * 3} min`;
+      document.getElementById('sim-slice').textContent = formatUSD(sliceSize) + ' / tranche';
+
+      // VPIN calculation
+      const baseVpin = 0.184;
+      const sizeFactor = (orderSize / 10000000) * 0.12;
+      const currentVpin = (baseVpin + sizeFactor).toFixed(3);
+      document.getElementById('box-vpin-val').textContent = currentVpin + ` (${(currentVpin * 100).toFixed(1)}%)`;
+      
+      const mevProb = (currentVpin * 14).toFixed(1);
+      document.getElementById('sim-mev').textContent = mevProb + '% (Low Risk)';
+    }
+
+    function setUrgency(urg, btn) {
+      state.urgency = urg;
+      btn.parentElement.querySelectorAll('.btn-pill').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const labels = {
+        'passive': 'Passive Limit (Maker Sentry)',
+        'adaptive': 'Adaptive TWAP (Almgren-Chriss)',
+        'fok': 'Fill-or-Kill (Sub-ms Atomic)'
+      };
+      document.getElementById('disp-urgency').textContent = labels[urg];
+      updateExecutionSim();
+    }
+
+    function runSimulatedExecution() {
+      const orderUSD = formatUSD(state.orderSize);
+      addTerminalLog('EXEC', `Order Armor dispatched: ${orderUSD} WBTC via Private RPC Titan Builder. Slippage bound strictly locked.`);
+      setTimeout(() => {
+        addTerminalLog('EXEC_FILL', `Tranche 1/6 Filled: $250,000 at $88,448.20 (0.002% slippage). Microstructure verified.`);
+      }, 400);
+    }
+
+    /* Tab 2: SoSoValue ETF Inflows & Shocks */
+    function setEtfAsset(asset, btn) {
+      state.etfAsset = asset;
+      btn.parentElement.querySelectorAll('.btn-pill').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderEtfChart();
+      addTerminalLog('DATA', `Switched SoSoValue ETF telemetry feed to: ${asset} Spot Suite.`);
+    }
+
+    function simulateInflowShock(shockAmount) {
+      if (shockAmount < 0) {
+        document.getElementById('shock-label').textContent = `Outflow Shock (${shockAmount}M)`;
+        document.getElementById('etf-latest-net').textContent = `-$512.4M`;
+        document.getElementById('etf-latest-net').style.color = 'var(--status-crit)';
+        addTerminalLog('ALERT', `SoSoValue Anomaly Triggered: Daily Net Outflow exceeds $500M. Autonomously tightening VaR bound by 20%.`);
+      } else if (shockAmount > 0) {
+        document.getElementById('shock-label').textContent = `Inflow Surge (+${shockAmount}M)`;
+        document.getElementById('etf-latest-net').textContent = `+$642.8M`;
+        document.getElementById('etf-latest-net').style.color = 'var(--status-ok)';
+        addTerminalLog('MOMENTUM', `SoSoValue Institutional Surge: Net Inflow +$642.8M. Institutional correlation beta +0.84.`);
+      } else {
+        document.getElementById('shock-label').textContent = `Normal Flow ($0M)`;
+        document.getElementById('etf-latest-net').textContent = `+$458.2M`;
+        document.getElementById('etf-latest-net').style.color = 'var(--status-ok)';
+        addTerminalLog('DATA', `SoSoValue flow normalized to baseline.`);
+      }
+      renderEtfChart(shockAmount);
+    }
+
+    /* Tab 4: Circuit Breakers & Stress Scenarios */
+    function triggerScenario(type) {
+      state.isTripped = true;
+      const kpiCard = document.getElementById('kpi-card-breaker');
+      const kpiInd = document.getElementById('kpi-breaker-ind');
+      const kpiVal = document.getElementById('kpi-breaker-val');
+
+      if (type === 'flash_crash') {
+        state.drawdownCurrentPct = 3.45;
+        state.volSpikePips = 68.2;
+        
+        document.getElementById('brk-box-dd').classList.add('tripped');
+        document.getElementById('brk-badge-dd').textContent = 'TRIPPED [HALT]';
+        document.getElementById('brk-badge-dd').className = 'breaker-badge tripped';
+        document.getElementById('brk-val-dd').textContent = '3.45% / 3.00%';
+        document.getElementById('brk-val-dd').style.color = 'var(--status-crit)';
+
+        document.getElementById('brk-box-vol').classList.add('tripped');
+        document.getElementById('brk-badge-vol').textContent = 'SPIKE HALT';
+        document.getElementById('brk-badge-vol').className = 'breaker-badge tripped';
+        document.getElementById('brk-val-vol').textContent = '68.2 pips/min';
+
+        kpiCard.classList.add('alert');
+        kpiInd.textContent = 'TRIPPED [TERMINAL LOCKED]';
+        kpiInd.className = 'kpi-indicator breaker';
+        kpiVal.textContent = '3.45% DD';
+
+        addTerminalLog('CRIT_KILL', 'DRAWDOWN BREACH: Portfolio loss breached 3.0% maximum daily ceiling. Hard Kill Switch engaged. All active orders cancelled in 2.1ms.');
+      } 
+      else if (type === 'etf_crunch') {
+        state.drawdownCurrentPct = 1.95;
+        document.getElementById('brk-box-vol').classList.add('tripped');
+        document.getElementById('brk-badge-vol').textContent = 'ELEVATED';
+        document.getElementById('brk-badge-vol').className = 'breaker-badge tripped';
+
+        addTerminalLog('WARN_GATE', 'SoSoValue Outflow Shock: -$680M net institutional dump. Auto-deleveraging open long delta by 35% on ValueChain vault.');
+      }
+      else if (type === 'oracle_divergence') {
+        document.getElementById('brk-box-oracle').classList.add('tripped');
+        document.getElementById('brk-badge-oracle').textContent = 'DISLOCATION';
+        document.getElementById('brk-badge-oracle').className = 'breaker-badge tripped';
+        document.getElementById('brk-val-oracle').textContent = '1.20% (120 bps)';
+        document.getElementById('brk-val-oracle').style.color = 'var(--status-crit)';
+
+        addTerminalLog('ORACLE_GUARD', 'Price Disparity Alert: Binance/Coinbase vs AMM dislocated by 120 bps. Toxic arbitrage detected. Execution router frozen.');
+      }
+      else if (type === 'toxic_swarm') {
+        document.getElementById('brk-box-toxic').classList.add('tripped');
+        document.getElementById('brk-badge-toxic').textContent = 'TOXIC FLOW';
+        document.getElementById('brk-badge-toxic').className = 'breaker-badge tripped';
+        document.getElementById('brk-val-toxic').textContent = 'VPIN: 0.620';
+        document.getElementById('brk-val-toxic').style.color = 'var(--status-crit)';
+
+        addTerminalLog('MEV_SENTRY', 'Toxic Order Flow Surge: VPIN = 0.620 > 0.450 bound. Routing exclusively through Private Builders to prevent frontrunning.');
+      }
+    }
+
+    function resetAllBreakers() {
+      state.isTripped = false;
+      state.drawdownCurrentPct = 0.42;
+      state.volSpikePips = 18.4;
+
+      const boxes = ['brk-box-dd', 'brk-box-vol', 'brk-box-oracle', 'brk-box-toxic'];
+      boxes.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.remove('tripped');
+      });
+
+      document.getElementById('brk-badge-dd').textContent = 'NORMAL';
+      document.getElementById('brk-badge-dd').className = 'breaker-badge normal';
+      document.getElementById('brk-val-dd').textContent = '0.42% / 3.00%';
+      document.getElementById('brk-val-dd').style.color = 'var(--text-white)';
+
+      document.getElementById('brk-badge-vol').textContent = 'NORMAL';
+      document.getElementById('brk-badge-vol').className = 'breaker-badge normal';
+      document.getElementById('brk-val-vol').textContent = '18.4 pips/min';
+
+      document.getElementById('brk-badge-oracle').textContent = 'NORMAL';
+      document.getElementById('brk-badge-oracle').className = 'breaker-badge normal';
+      document.getElementById('brk-val-oracle').textContent = '0.03% (2.6 bps)';
+      document.getElementById('brk-val-oracle').style.color = 'var(--text-white)';
+
+      document.getElementById('brk-badge-toxic').textContent = 'NORMAL';
+      document.getElementById('brk-badge-toxic').className = 'breaker-badge normal';
+      document.getElementById('brk-val-toxic').textContent = 'VPIN: 0.184';
+      document.getElementById('brk-val-toxic').style.color = 'var(--text-white)';
+
+      const kpiCard = document.getElementById('kpi-card-breaker');
+      kpiCard.classList.remove('alert');
+      const kpiInd = document.getElementById('kpi-breaker-ind');
+      kpiInd.textContent = 'ARMED [3.0% HARD CAP]';
+      kpiInd.className = 'kpi-indicator ok';
+      document.getElementById('kpi-breaker-val').textContent = '0.42% DD';
+
+      addTerminalLog('SYS_RESET', 'All circuit breakers reset by Solo Operator. Risk governors re-armed. System nominal.');
+    }
+
+    /* Tab 5: API Payload Inspector */
+    function showApiPayload(type, btn) {
+      btn.parentElement.querySelectorAll('.btn-pill').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const box = document.getElementById('api-payload-box');
+      const epDisp = document.getElementById('disp-api-ep');
+
+      if (type === 'btc_etf') {
+        epDisp.textContent = '/v1/etf/btc/inflow';
+        box.textContent = JSON.stringify({
+          status: 200,
+          endpoint: "api.sosovalue.com/api/v1/etf/btc/inflow",
+          timestamp: new Date().toISOString(),
+          total_net_inflow_usd: 458200000,
+          cumulative_net_inflow_usd: 21840000000,
+          issuers: {
+            IBIT: 289400000,
+            FBTC: 114200000,
+            BITB: 32100000,
+            ARKB: 41100000,
+            GBTC: -18600000
+          },
+          anomaly_z_score: 1.82,
+          onchain_beta_estimate: 0.814
+        }, null, 2);
+      } else if (type === 'eth_etf') {
+        epDisp.textContent = '/v1/etf/eth/inflow';
+        box.textContent = JSON.stringify({
+          status: 200,
+          endpoint: "api.sosovalue.com/api/v1/etf/eth/inflow",
+          timestamp: new Date().toISOString(),
+          total_net_inflow_usd: 84600000,
+          cumulative_net_inflow_usd: 2420000000,
+          issuers: {
+            ETHA: 68100000,
+            FETH: 21400000,
+            ETHE: -4900000
+          },
+          anomaly_z_score: 1.15,
+          onchain_beta_estimate: 0.742
+        }, null, 2);
+      } else {
+        epDisp.textContent = '/v1/index/ssi';
+        box.textContent = JSON.stringify({
+          status: 200,
+          endpoint: "api.sosovalue.com/api/v1/index/ssi",
+          timestamp: new Date().toISOString(),
+          ssi_sentiment_index: 74.2,
+          regime: "GREED_ACCUMULATION",
+          social_volume_24h: 184520,
+          fear_greed_composite: 76,
+          funding_rate_aggregate: 0.0084,
+          leverage_ratio: 0.28
+        }, null, 2);
+      }
+    }
+
+    /* Terminal Logging Subsystem */
+    function initLogs() {
+      addTerminalLog('BOOT', 'SovereignDesk v1.4.2 Kernel initialized. Native C++ SIMD engine bound.');
+      addTerminalLog('FEED', 'SoSoValue ETF Webhook connected: wss://api.sosovalue.com/v1/stream.');
+      addTerminalLog('VAL', 'ValueChain L1 RPC connected: https://rpc.valuechain.network (Latency 3.8ms).');
+      addTerminalLog('SENTRY', 'Mehd AI Fast Risk Kernel active. Parametric VaR and Kyle Lambda armor armed.');
+    }
+
+    function addTerminalLog(source, msg) {
+      const now = new Date();
+      const ts = now.toISOString().substring(11, 23);
+      const feed = document.getElementById('terminal-feed');
+      
+      const line = document.createElement('div');
+      line.className = 'terminal-line';
+
+      let msgClass = '';
+      if (source.includes('CRIT') || source.includes('KILL')) msgClass = 'err';
+      else if (source.includes('WARN') || source.includes('ALERT')) msgClass = 'warn';
+      else if (source.includes('RESET') || source.includes('EXEC_FILL')) msgClass = 'ok';
+
+      line.innerHTML = `
+        <span class="terminal-ts">[${ts}]</span>
+        <span class="terminal-src">[${source}]</span>
+        <span class="terminal-msg ${msgClass}">${msg}</span>
+      `;
+      feed.appendChild(line);
+      feed.scrollTop = feed.scrollHeight;
+    }
+
+    function clearTerminalLogs() {
+      document.getElementById('terminal-feed').innerHTML = '';
+      addTerminalLog('SYS', 'Telemetry feed buffer cleared.');
+    }
+
+    function startTelemetryHeartbeat() {
+      setInterval(() => {
+        const jitter = (3.5 + Math.random() * 0.9).toFixed(1);
+        const hdr = document.getElementById('hdr-latency');
+        if (hdr) hdr.textContent = jitter + ' ms';
+      }, 2500);
+    }
+
+    function formatUSD(val) {
+      return '$' + Math.round(val).toLocaleString('en-US');
+    }
+
+    /* ═══════════════ HIGH-DPI CANVAS CHARTS ═══════════════ */
+
+    function initCharts() {
+      setupCanvas('chartVarDist');
+      setupCanvas('chartEtfInflows');
+      setupCanvas('chartDepth');
+
+      renderVarDistributionChart();
+      renderEtfChart();
+      renderDepthChart();
+
+      window.addEventListener('resize', () => {
+        setupCanvas('chartVarDist');
+        setupCanvas('chartEtfInflows');
+        setupCanvas('chartDepth');
+        renderVarDistributionChart();
+        renderEtfChart();
+        renderDepthChart();
+      });
+    }
+
+    function setupCanvas(id) {
+      const canvas = document.getElementById(id);
+      if (!canvas) return;
+      const dpr = window.devicePixelRatio || 1;
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      const ctx = canvas.getContext('2d');
+      ctx.resetTransform?.();
+      ctx.scale(dpr, dpr);
+    }
+
+    /* 1. Monte Carlo Distribution Chart */
+    function renderVarDistributionChart() {
+      const canvas = document.getElementById('chartVarDist');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const rect = canvas.getBoundingClientRect();
+      const w = rect.width;
+      const h = rect.height;
+
+      ctx.clearRect(0, 0, w, h);
+
+      // Background grid lines
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.04)';
+      ctx.lineWidth = 1;
+      for (let x = 0; x < w; x += 50) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, h);
+        ctx.stroke();
+      }
+      for (let y = 0; y < h; y += 40) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(w, y);
+        ctx.stroke();
+      }
+
+      // Generate distribution points
+      const points = [];
+      const numPoints = 140;
+      const mean = 0.5; // Center
+      const sigma = 0.12;
+
+      for (let i = 0; i <= numPoints; i++) {
+        const xNorm = i / numPoints;
+        const z = (xNorm - mean) / sigma;
+        let pdf = 0;
+        if (state.distModel === 'student_t') {
+          // Fat-tailed Student-t (df=4)
+          const df = 4;
+          pdf = Math.pow(1 + (z * z) / df, -(df + 1) / 2);
+        } else {
+          // Normal Gaussian
+          pdf = Math.exp(-0.5 * z * z);
+        }
+        points.push({ x: xNorm * w, y: h - 30 - pdf * (h * 0.75), pdf });
+      }
+
+      // Calculate cutoff position based on confidence
+      const cutoffIndex = Math.floor(numPoints * (1 - state.confidence));
+      const cutoffX = points[cutoffIndex].x;
+
+      // Draw Tail Risk / VaR area
+      ctx.fillStyle = 'rgba(239, 68, 68, 0.22)';
+      ctx.beginPath();
+      ctx.moveTo(points[0].x, h - 30);
+      for (let i = 0; i <= cutoffIndex; i++) {
+        ctx.lineTo(points[i].x, points[i].y);
+      }
+      ctx.lineTo(cutoffX, h - 30);
+      ctx.closePath();
+      ctx.fill();
+
+      // Draw Main Distribution Curve
+      ctx.strokeStyle = '#38BDF8';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(points[0].x, points[0].y);
+      for (let i = 1; i < points.length; i++) {
+        ctx.lineTo(points[i].x, points[i].y);
+      }
+      ctx.stroke();
+
+      // Baseline axis
+      ctx.strokeStyle = '#2A364B';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(0, h - 30);
+      ctx.lineTo(w, h - 30);
+      ctx.stroke();
+
+      // Cutoff vertical marker
+      ctx.strokeStyle = '#EF4444';
+      ctx.lineWidth = 2;
+      ctx.setLineDash([4, 3]);
+      ctx.beginPath();
+      ctx.moveTo(cutoffX, 20);
+      ctx.lineTo(cutoffX, h - 30);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Cutoff text label
+      ctx.fillStyle = '#EF4444';
+      ctx.font = '10px "JetBrains Mono"';
+      ctx.fillText(`VaR 99.0% Cutoff`, cutoffX + 6, 35);
+      ctx.fillStyle = '#94A3B8';
+      ctx.fillText(`Mean ($0 Alpha)`, w * 0.5 - 35, h - 14);
+      ctx.fillText(`-$1,500,000`, 10, h - 14);
+      ctx.fillText(`+$1,500,000`, w - 85, h - 14);
+    }
+
+    /* 2. SoSoValue ETF Net Inflows Chart */
+    function renderEtfChart(shockVal = 0) {
+      const canvas = document.getElementById('chartEtfInflows');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const rect = canvas.getBoundingClientRect();
+      const w = rect.width;
+      const h = rect.height;
+
+      ctx.clearRect(0, 0, w, h);
+
+      // Grid
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.04)';
+      ctx.lineWidth = 1;
+      for (let y = 0; y < h; y += 40) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(w, y);
+        ctx.stroke();
+      }
+
+      // Zero Line
+      const zeroY = h * 0.62;
+      ctx.strokeStyle = '#2A364B';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(0, zeroY);
+      ctx.lineTo(w, zeroY);
+      ctx.stroke();
+
+      // ETF Daily Net Inflow Mock Data (last 20 days)
+      const days = 20;
+      let mockFlows = [
+        185, 220, 310, -45, 120, 480, 520, -110, -85, 240, 
+        380, 410, 290, 160, -30, 310, 450, 520, 390, 458
+      ];
+
+      if (shockVal !== 0) {
+        mockFlows[mockFlows.length - 1] = shockVal;
+      }
+
+      const barWidth = (w - 60) / days;
+      const maxAbsFlow = 700; // $700M scale
+
+      // Draw bars
+      for (let i = 0; i < days; i++) {
+        const val = mockFlows[i];
+        const barH = (Math.abs(val) / maxAbsFlow) * (h * 0.5);
+        const x = 30 + i * barWidth;
+
+        if (val >= 0) {
+          ctx.fillStyle = '#10B981';
+          ctx.fillRect(x + 4, zeroY - barH, barWidth - 8, barH);
+        } else {
+          ctx.fillStyle = '#EF4444';
+          ctx.fillRect(x + 4, zeroY, barWidth - 8, barH);
+        }
+      }
+
+      // Draw 7-Day Moving Average Line
+      ctx.strokeStyle = '#38BDF8';
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      let maPoints = [];
+      for (let i = 0; i < days; i++) {
+        let sum = 0;
+        let count = 0;
+        for (let j = Math.max(0, i - 6); j <= i; j++) {
+          sum += mockFlows[j];
+          count++;
+        }
+        const ma = sum / count;
+        const x = 30 + i * barWidth + (barWidth / 2);
+        const y = zeroY - (ma / maxAbsFlow) * (h * 0.5);
+        maPoints.push({ x, y });
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+
+      // Legend & Labels
+      ctx.fillStyle = '#64748B';
+      ctx.font = '9px "JetBrains Mono"';
+      ctx.fillText('+$600M', 5, 25);
+      ctx.fillText('$0M', 5, zeroY - 4);
+      ctx.fillText('-$300M', 5, h - 10);
+      ctx.fillStyle = '#38BDF8';
+      ctx.fillText('7D MOVING AVG', w - 110, 25);
+    }
+
+    /* 3. Liquidity Depth Chart */
+    function renderDepthChart() {
+      const canvas = document.getElementById('chartDepth');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const rect = canvas.getBoundingClientRect();
+      const w = rect.width;
+      const h = rect.height;
+
+      ctx.clearRect(0, 0, w, h);
+
+      // Grid
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.04)';
+      ctx.lineWidth = 1;
+      for (let y = 0; y < h; y += 40) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(w, y);
+        ctx.stroke();
+      }
+
+      const midX = w / 2;
+      const baseY = h - 25;
+
+      // Bid Depth Area (Left - Green)
+      ctx.fillStyle = 'rgba(16, 185, 129, 0.2)';
+      ctx.strokeStyle = '#10B981';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(midX, baseY);
+
+      const bidSteps = [
+        { dx: 0, dy: 10 },
+        { dx: 40, dy: 35 },
+        { dx: 90, dy: 80 },
+        { dx: 150, dy: 130 },
+        { dx: 220, dy: 180 },
+        { dx: midX - 20, dy: 210 }
+      ];
+
+      ctx.lineTo(midX, baseY - bidSteps[0].dy);
+      for (let i = 1; i < bidSteps.length; i++) {
+        const x = midX - bidSteps[i].dx;
+        const y = baseY - bidSteps[i].dy;
+        ctx.lineTo(x, baseY - bidSteps[i-1].dy);
+        ctx.lineTo(x, y);
+      }
+      ctx.lineTo(20, baseY);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      // Ask Depth Area (Right - Red)
+      ctx.fillStyle = 'rgba(239, 68, 68, 0.2)';
+      ctx.strokeStyle = '#EF4444';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(midX, baseY);
+
+      const askSteps = [
+        { dx: 0, dy: 10 },
+        { dx: 38, dy: 32 },
+        { dx: 85, dy: 75 },
+        { dx: 145, dy: 125 },
+        { dx: 215, dy: 175 },
+        { dx: midX - 20, dy: 205 }
+      ];
+
+      ctx.lineTo(midX, baseY - askSteps[0].dy);
+      for (let i = 1; i < askSteps.length; i++) {
+        const x = midX + askSteps[i].dx;
+        const y = baseY - askSteps[i].dy;
+        ctx.lineTo(x, baseY - askSteps[i-1].dy);
+        ctx.lineTo(x, y);
+      }
+      ctx.lineTo(w - 20, baseY);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      // Mid Price Line
+      ctx.strokeStyle = '#CBD5E1';
+      ctx.lineWidth = 1;
+      ctx.setLineDash([3, 3]);
+      ctx.beginPath();
+      ctx.moveTo(midX, 20);
+      ctx.lineTo(midX, baseY);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      ctx.fillStyle = '#CBD5E1';
+      ctx.font = '10px "JetBrains Mono"';
+      ctx.fillText('MID $88,450', midX - 35, 18);
+      ctx.fillStyle = '#10B981';
+      ctx.fillText('BIDS (BUY DEPTH)', 30, baseY + 18);
+      ctx.fillStyle = '#EF4444';
+      ctx.fillText('ASKS (SELL DEPTH)', w - 140, baseY + 18);
+    }
+  </script>
+</body>
+</html>
