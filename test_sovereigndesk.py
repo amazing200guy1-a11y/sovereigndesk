@@ -20,14 +20,13 @@ class TestSovereignDeskFormalInvariants(unittest.TestCase):
     def test_01_parametric_var_99_confidence(self):
         """Invariant 1: 99% VaR must strictly equal z * sigma * equity."""
         equity = 25_000_000.0
-        daily_vol_pct = 3.0 # 3.0% daily volatility
+        daily_vol_pct = 3.0
         var_usd, var_pct, cvar_usd = self.engine.compute_parametric_var(
             equity=equity,
             daily_volatility_pct=daily_vol_pct,
             confidence_level=0.99,
             horizon_days=1
         )
-        # Expected: z = 2.326348, var_pct = 6.97904%, var_usd = $1,744,761
         self.assertAlmostEqual(var_pct, 6.97904, places=2)
         self.assertGreater(cvar_usd, var_usd, "CVaR must strictly exceed VaR in the loss tail")
 
@@ -57,13 +56,13 @@ class TestSovereignDeskFormalInvariants(unittest.TestCase):
 
     def test_05_circuit_breaker_warning_zone(self):
         """Invariant 5: Drawdown between 2.25% and 2.99% flags WARNING state."""
-        status, dd_pct, is_tripped = self.engine.evaluate_circuit_breaker(current_equity_usd=24_350_000.0) # 2.6% DD
+        status, dd_pct, is_tripped = self.engine.evaluate_circuit_breaker(current_equity_usd=24_350_000.0)
         self.assertEqual(status, RiskStatus.WARNING)
         self.assertFalse(is_tripped)
 
     def test_06_circuit_breaker_hard_trip(self):
         """Invariant 6: Drawdown >= 3.0% immediately trips autonomous circuit breaker."""
-        status, dd_pct, is_tripped = self.engine.evaluate_circuit_breaker(current_equity_usd=24_200_000.0) # 3.2% DD
+        status, dd_pct, is_tripped = self.engine.evaluate_circuit_breaker(current_equity_usd=24_200_000.0)
         self.assertEqual(status, RiskStatus.CIRCUIT_BREAKER_TRIPPED)
         self.assertTrue(is_tripped)
         self.assertTrue(self.engine.circuit_breaker_active)
@@ -81,8 +80,6 @@ class TestSovereignDeskFormalInvariants(unittest.TestCase):
 
     def test_08_single_trade_loss_cap_enforcement(self):
         """Invariant 8: Single trade with potential loss > 1.0% equity is rejected."""
-        # 1.0% of $25M is $250,000.
-        # Trade size $10M with 3.0% stop-loss = $300,000 potential loss -> MUST BE REJECTED
         approved, reason = self.engine.validate_trade_execution(
             trade_size_usd=10_000_000.0,
             stop_loss_pct=3.0,
@@ -93,7 +90,6 @@ class TestSovereignDeskFormalInvariants(unittest.TestCase):
 
     def test_09_single_trade_loss_cap_approval(self):
         """Invariant 9: Trade with potential loss <= 1.0% equity is approved."""
-        # Trade size $2M with 2.0% stop loss = $40,000 potential loss (< $250,000 cap) -> APPROVED
         approved, reason = self.engine.validate_trade_execution(
             trade_size_usd=2_000_000.0,
             stop_loss_pct=2.0,
@@ -102,19 +98,46 @@ class TestSovereignDeskFormalInvariants(unittest.TestCase):
         self.assertTrue(approved)
         self.assertIn("APPROVED", reason)
 
-    def test_10_sub_millisecond_latency_benchmark(self):
-        """Invariant 10: Benchmark suite must execute risk calculations in under 0.1 ms/op."""
+    def test_10_ai_token_pruning_optimization(self):
+        """Invariant 10: Quantitative parser prunes raw conversational prompt by > 80%."""
+        verbose_prompt = (
+            "Hey Grok agent, please look at the market right now and execute a BUY order "
+            "for 500,000 USD of Bitcoin BTC on ValueChain DEX with a stop-loss at 1.5% "
+            "because the macro ETF inflow just surged according to SoSoValue telemetry."
+        )
+        compact, raw_tok, pruned_tok, reduction = self.engine.prune_agent_prompt_tokens(verbose_prompt)
+        self.assertIn("ACTION:BUY", compact)
+        self.assertIn("PAIR:BTC", compact)
+        self.assertGreaterEqual(reduction, 80.0, f"Token reduction ({reduction:.1f}%) must be >= 80%")
+
+    def test_11_hallucination_firewall_rejects_unconserved_allocation(self):
+        """Invariant 11: Hallucinated portfolio allocation summing to 110% is blocked."""
+        hallucinated_portfolio = {"BTC": 40.0, "ETH": 35.0, "SOL": 35.0} # Sums to 110%
+        valid, reason = self.engine.verify_agent_hallucination_firewall(hallucinated_portfolio)
+        self.assertFalse(valid)
+        self.assertIn("HALLUCINATION_DETECTED", reason)
+
+    def test_12_hallucination_firewall_approves_conserved_allocation(self):
+        """Invariant 12: Strictly conserved 100% allocation with concentration caps passes."""
+        valid_portfolio = {"BTC": 35.0, "ETH": 30.0, "SOL": 20.0, "USDC": 15.0} # Sums to 100%
+        valid, reason = self.engine.verify_agent_hallucination_firewall(valid_portfolio)
+        self.assertTrue(valid)
+        self.assertIn("PASSED", reason)
+
+    def test_13_sub_millisecond_latency_benchmark(self):
+        """Invariant 13: Full risk and invariant cycle executes in under 0.05 ms/op."""
         iterations = 500
         start = time.perf_counter()
         for _ in range(iterations):
             self.engine.compute_parametric_var(25_000_000.0, 3.2, 0.99, 1)
             self.engine.evaluate_circuit_breaker(24_800_000.0)
             self.engine.validate_trade_execution(1_000_000.0, 1.5, 25_000_000.0)
+            self.engine.verify_agent_hallucination_firewall({"BTC": 35.0, "ETH": 30.0, "SOL": 20.0, "USDC": 15.0})
         elapsed = time.perf_counter() - start
-        avg_latency_ms = (elapsed / (iterations * 3)) * 1000.0
+        avg_latency_ms = (elapsed / (iterations * 4)) * 1000.0
 
-        self.assertLess(avg_latency_ms, 0.1, f"Average latency ({avg_latency_ms:.4f} ms) exceeds 0.1 ms threshold")
-        print(f"\n[BENCHMARK] {iterations * 3} SovereignDesk Risk Evaluations: {elapsed:.4f}s | Avg Latency: {avg_latency_ms:.4f} ms/operation")
+        self.assertLess(avg_latency_ms, 0.05)
+        print(f"\n[BENCHMARK] {iterations * 4} SovereignDesk Invariant Operations: {elapsed:.4f}s | Avg Latency: {avg_latency_ms:.4f} ms/operation")
 
 if __name__ == "__main__":
     unittest.main()
