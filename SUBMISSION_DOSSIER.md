@@ -1,4 +1,4 @@
-# 🏛️ SovereignDesk: Autonomous Institutional Risk Copilot for Solo On-Chain Fund Managers
+﻿# ðŸ›ï¸ SovereignDesk: Autonomous Institutional Risk Copilot for Solo On-Chain Fund Managers
 
 > **Target Buildathon**: SoSoValue "Build Your One-Person On-Chain Finance Business" Buildathon  
 > **Platform**: Akindo / SoSoValue Open Platform  
@@ -6,18 +6,18 @@
 > **Target Deadline**: November 30, 2026  
 > **Weapon Name**: `SovereignDesk`  
 > **Author & Quantitative Architect**: Usman (Backend, Cloud & Quantitative Systems Engineer)  
-> **Repository Path**: `C:\Mehd ai\hackathons\sosovalue\`  
-> **Interactive Cockpit**: `file:///C:/Mehd%20ai/hackathons/sosovalue/index.html`  
+> **Repository Path**: `C:\hackathons\sosovalue\`  
+> **Interactive Cockpit**: `file:///https://amazing200guy1-a11y.github.io/sovereigndesk/index.html`  
 
 ---
 
-## 📌 1. Akindo Submission Profile
+## ðŸ“Œ 1. Akindo Submission Profile
 
 ### Project Name
 **SovereignDesk**
 
 ### One-Line Tagline
-Autonomous Institutional Risk & Execution Copilot empowering a single quantitative operator to manage a $10M–$100M on-chain fund using SoSoValue macroeconomic ETF telemetry, ValueChain smart vaults, and native algorithmic capital defense.
+Autonomous Institutional Risk & Execution Copilot empowering a single quantitative operator to manage a $10Mâ€“$100M on-chain fund using SoSoValue macroeconomic ETF telemetry, ValueChain smart vaults, and native algorithmic capital defense.
 
 ### Category
 - **AI x On-Chain Finance (Agentic Finance)**
@@ -30,7 +30,7 @@ Solo quantitative traders, DeFi fund architects, algorithmic yield operators, hi
 
 ---
 
-## 🧭 2. The Solo Operator Dilemma & Problem Statement
+## ðŸ§­ 2. The Solo Operator Dilemma & Problem Statement
 
 Historically, running an institutional-grade investment fund required a minimum team of 12 to 20 professionals:
 1. **Chief Investment Officer (CIO)**: Decides macro bias and cross-asset allocations.
@@ -42,41 +42,41 @@ Historically, running an institutional-grade investment fund required a minimum 
 For a solo Web3 developer or quantitative trader, managing institutional capital ($10M+) on-chain has traditionally been suicidal:
 - **Asymmetric MEV & Toxic Flow**: On-chain automated market makers (AMMs) suffer from toxic arbitrage, sandwich attacks, and LP loss-versus-rebalancing (LVR).
 - **Macro Blindness**: Decentralized protocols operate inside an on-chain bubble, oblivious to massive off-chain institutional capital movements (e.g., $500M+ spot ETF inflows or liquidations by BlackRock, Fidelity, and Grayscale).
-- **Human Execution Latency**: When a Black Swan event occurs (e.g., de-pegging, flash crashes, oracle dislocations), human reaction times (15–60 seconds) guarantee liquidation before manual stop-losses can be placed.
+- **Human Execution Latency**: When a Black Swan event occurs (e.g., de-pegging, flash crashes, oracle dislocations), human reaction times (15â€“60 seconds) guarantee liquidation before manual stop-losses can be placed.
 
 ### The SovereignDesk Thesis
-**One skilled quantitative founder + SoSoValue's financial API telemetry + Mehd AI's sub-millisecond risk kernel = An autonomous, self-defending on-chain hedge fund with a 98.9% net operating margin.**
+**One skilled quantitative founder + SoSoValue's financial API telemetry + SovereignDesk's sub-millisecond risk kernel = An autonomous, self-defending on-chain hedge fund with a 98.9% net operating margin.**
 
 ---
 
-## 🛡️ 3. SovereignDesk Core Weaponry & Architecture
+## ðŸ›¡ï¸ 3. SovereignDesk Core Weaponry & Architecture
 
-SovereignDesk extracts the battle-tested quantitative risk DNA from **Mehd AI** (C++20 SIMD kernels, vectorized cross-correlation matrices, toxic order flow scanners) and connects it directly to **SoSoValue's Institutional Data Platform** and **ValueChain's Layer 1 settlement layer**.
+SovereignDesk extracts the battle-tested quantitative risk DNA from **SovereignDesk Engine** (C++20 SIMD kernels, vectorized cross-correlation matrices, toxic order flow scanners) and connects it directly to **SoSoValue's Institutional Data Platform** and **ValueChain's Layer 1 settlement layer**.
 
 ```mermaid
 graph TD
-    subgraph DataLayer ["🌐 SoSoValue API Telemetry Ingestion"]
+    subgraph DataLayer ["ðŸŒ SoSoValue API Telemetry Ingestion"]
         ETF["Spot ETF Flow API (/v1/etf/btc/inflow)"]
         SSI["SoSoValue Sentiment Index (/v1/index/ssi)"]
         NAV["ETF Net Asset Value & Outflow Tracker"]
         CORR["Institutional Rolling Inflow Beta Engine"]
     end
 
-    subgraph RiskKernel ["⚙️ Mehd AI Native Quantitative Core"]
+    subgraph RiskKernel ["âš™ï¸ SovereignDesk Quantitative Core"]
         VAR["Parametric & Student-t VaR Engine (95% / 99%)"]
         CVAR["Expected Shortfall (CVaR) Tail Evaluator"]
         KYLE["Kyle's Lambda & Almgren-Chriss Slippage Armor"]
         VPIN["VPIN Toxic Order Flow & MEV Radar"]
     end
 
-    subgraph Governor ["🔒 Sovereign Autonomous Circuit Breakers"]
+    subgraph Governor ["ðŸ”’ Sovereign Autonomous Circuit Breakers"]
         DD["3.0% Daily Drawdown Hard Lockout"]
         SPIKE["50-Pip / 60s Black Swan Kill Switch"]
         ORACLE["SoSoValue vs AMM Dislocation Guard (40 bps)"]
         FOK["Sub-Millisecond Atomic Order Cancellation"]
     end
 
-    subgraph Settlement ["💎 Execution & Settlement (ValueChain / Arbitrum)"]
+    subgraph Settlement ["ðŸ’Ž Execution & Settlement (ValueChain / Arbitrum)"]
         VAULT["Solo Manager Non-Custodial Smart Vault"]
         TWAP["Adaptive TWAP/VWAP Slicing Router"]
         BUILDER["Private RPC & MEV Shield (Flashbots/Titan)"]
@@ -90,7 +90,7 @@ graph TD
 
 ---
 
-## 📐 4. Rigorous Mathematical Foundations
+## ðŸ“ 4. Rigorous Mathematical Foundations
 
 SovereignDesk replaces human discretion with mathematically proven quantitative formulations:
 
@@ -134,14 +134,14 @@ If $\Delta_{\text{ETF}} \le -2.0 \sigma$ (Institutional Outflow Shock), the risk
 
 $$L_{\text{max}} = L_{\text{baseline}} \cdot \exp\left( -k \cdot \left| \Delta_{\text{ETF}} \right| \right)$$
 
-### 4. Kyle’s Lambda & Almgren-Chriss Slippage Armor
+### 4. Kyleâ€™s Lambda & Almgren-Chriss Slippage Armor
 When the solo operator executes multi-million-dollar rebalances on decentralized liquidity pools, SovereignDesk models price impact using Kyle's Lambda ($\lambda$) and the Almgren-Chriss market impact model:
 
 $$\Delta P(Q) = \lambda \cdot Q + \eta \left( \frac{Q}{\tau} \right)^\alpha$$
 
 Where:
 - $Q$ is order size in base asset units.
-- $\lambda = \frac{2 \sigma_v}{\sigma_u}$ is Kyle’s price impact coefficient (measuring Kyle's liquidity depth).
+- $\lambda = \frac{2 \sigma_v}{\sigma_u}$ is Kyleâ€™s price impact coefficient (measuring Kyle's liquidity depth).
 - $\tau$ is total execution duration.
 - $\eta \left(\frac{Q}{\tau}\right)^\alpha$ represents temporary liquidity displacement (transient impact).
 
@@ -166,7 +166,7 @@ If $\text{VPIN} > 0.450$, the order flow is declared **TOXIC**, and SovereignDes
 
 ---
 
-## 💼 5. The One-Person Business Model & Unit Economics
+## ðŸ’¼ 5. The One-Person Business Model & Unit Economics
 
 How does a single operator turn SovereignDesk into a high-margin on-chain business?
 
@@ -199,19 +199,19 @@ How does a single operator turn SovereignDesk into a high-margin on-chain busine
 
 ---
 
-## 💻 6. Technical Stack & Implementation Details
+## ðŸ’» 6. Technical Stack & Implementation Details
 
 | Layer | Technology | Function |
 |---|---|---|
 | **Frontend Terminal** | HTML5, CSS3 Titanium System, Canvas 2D | Sub-millisecond rendering of Monte Carlo PnL distribution, ETF flow bars, and depth charts with zero neon and zero emojis. |
-| **Mathematical Engine** | Vanilla JS (compatible with Mehd AI C++20 Core) | Parametric VaR, Student-t CVaR, Kyle’s Lambda, VPIN calculations. |
+| **Mathematical Engine** | Vanilla JS (SovereignDesk Math Core) | Parametric VaR, Student-t CVaR, Kyleâ€™s Lambda, VPIN calculations. |
 | **Macro Telemetry** | SoSoValue Open Platform API v1 | Endpoints: `/v1/etf/btc/inflow`, `/v1/etf/eth/inflow`, `/v1/index/ssi`. |
 | **Settlement Layer** | ValueChain Network / EVM | Smart vault contract execution, non-custodial capital lock, automated fee splits. |
 | **Security & Auditing** | AES-256 State Signatures, Private RPCs | Mempool frontrunning defense, sub-4ms hard kill switch. |
 
 ---
 
-## 🎬 7. Video Script & Demonstration Walkthrough
+## ðŸŽ¬ 7. Video Script & Demonstration Walkthrough
 
 **Format**: 3 to 5-minute video walkthrough for judges and allocators.  
 **Presenter**: Solo Founder / Quantitative Architect.  
@@ -228,23 +228,23 @@ How does a single operator turn SovereignDesk into a high-margin on-chain busine
 #### [00:45 - 01:45] Act II: Mathematical Risk Kernel & Monte Carlo VaR (Tab 1)
 - **Visual**: Click on `[01] VAR RISK METER`. Drag the "Fund Portfolio Equity" slider from $25M to $40M. Watch the PnL distribution curve update in real-time. Switch from Gaussian to Student-t distribution and change the confidence level from 95% to 99%.
 - **Voiceover**:  
-  *"Under the hood, SovereignDesk extracts the quantitative risk kernel from Mehd AI. Here in the VaR Risk Meter, we calculate real-time Parametric Value at Risk and fat-tail Student-t Expected Shortfall. When I adjust our fund equity slider, the system immediately recalculates our 1-Day loss bounds. At 99% confidence, our maximum expected 24h loss is strictly limited to $412,850. Furthermore, our native Lot Sizing Governor caps single-trade stop losses to prevent overexposure."*
+  *"Under the hood, SovereignDesk extracts the quantitative risk kernel from SovereignDesk Engine. Here in the VaR Risk Meter, we calculate real-time Parametric Value at Risk and fat-tail Student-t Expected Shortfall. When I adjust our fund equity slider, the system immediately recalculates our 1-Day loss bounds. At 99% confidence, our maximum expected 24h loss is strictly limited to $412,850. Furthermore, our native Lot Sizing Governor caps single-trade stop losses to prevent overexposure."*
 
 #### [01:45 - 02:45] Act III: SoSoValue Spot ETF Flow Integration (Tab 2)
 - **Visual**: Switch to `[02] SOSOVALUE ETF TRACKER`. Hover over the green inflow bars and 7-day moving average. Click the "Outflow (-$500M)" shock button.
 - **Voiceover**:  
-  *"Crypto no longer moves in an on-chain vacuum; it moves with institutional Wall Street ETF flows. SovereignDesk continuously ingests SoSoValue's Spot Bitcoin and Ethereum ETF APIs. We track the rolling 30-day Pearson correlation—currently at +0.814—and compute institutional inflow beta.*  
+  *"Crypto no longer moves in an on-chain vacuum; it moves with institutional Wall Street ETF flows. SovereignDesk continuously ingests SoSoValue's Spot Bitcoin and Ethereum ETF APIs. We track the rolling 30-day Pearson correlationâ€”currently at +0.814â€”and compute institutional inflow beta.*  
   *Notice what happens when I simulate a -$500M ETF outflow shock: SovereignDesk instantly detects the anomaly, flags the institutional outflow, and autonomously de-leverages our on-chain delta hedges before the NY market close."*
 
 #### [02:45 - 03:45] Act IV: Liquidity Depth & Slippage Armor (Tab 3)
 - **Visual**: Click `[03] LIQUIDITY & TOXIC FLOW`. Move the Target Order Size slider up to $3M. Click "EXECUTE SLIPPAGE-PROTECTED ORDER" and observe the terminal log feed.
 - **Voiceover**:  
-  *"When a solo manager executes rebalances on-chain, MEV bots love to sandwich them. SovereignDesk implements Kyle’s Lambda and the Almgren-Chriss market impact model. By analyzing order book imbalance and VPIN toxicity, the system determines the optimal TWAP tranche slicing schedule—breaking our order into six discreet tranches routed through private Flashbots builders with guaranteed slippage bounds."*
+  *"When a solo manager executes rebalances on-chain, MEV bots love to sandwich them. SovereignDesk implements Kyleâ€™s Lambda and the Almgren-Chriss market impact model. By analyzing order book imbalance and VPIN toxicity, the system determines the optimal TWAP tranche slicing scheduleâ€”breaking our order into six discreet tranches routed through private Flashbots builders with guaranteed slippage bounds."*
 
 #### [03:45 - 04:30] Act V: Automated Circuit Breakers & Black Swan Simulation (Tab 4)
 - **Visual**: Click `[04] CIRCUIT BREAKER SIM`. Press the red `[SHOCK 1] FLASH CRASH (-12% CASCADE SPIKE)` button. The screen shifts to alert state: Drawdown card turns crimson, badge flashes `TRIPPED [HALT]`, and the terminal prints the exact kill-switch execution logs.
 - **Voiceover**:  
-  *"Now, the ultimate test: a Black Swan event. I am going to trigger a simulated -12% flash crash. Instantly—in less than 4 milliseconds—our Daily Drawdown circuit breaker trips as losses approach the 3.0% hard cap. All active vault orders are purged, leverage is liquidated into stablecoins, and the terminal locks down. No panic, no emotional mistakes, zero human latency."*
+  *"Now, the ultimate test: a Black Swan event. I am going to trigger a simulated -12% flash crash. Instantlyâ€”in less than 4 millisecondsâ€”our Daily Drawdown circuit breaker trips as losses approach the 3.0% hard cap. All active vault orders are purged, leverage is liquidated into stablecoins, and the terminal locks down. No panic, no emotional mistakes, zero human latency."*
 
 #### [04:30 - 05:00] Act VI: Conclusion & Solo Business Economics (Tab 5)
 - **Visual**: Click `[05] 1-PERSON BUSINESS`. Highlight the ARR calculation ($1,425,000) and the 98.9% net operating margin.
@@ -253,7 +253,7 @@ How does a single operator turn SovereignDesk into a high-margin on-chain busine
 
 ---
 
-## 🏆 8. Alignment with SoSoValue Buildathon Criteria
+## ðŸ† 8. Alignment with SoSoValue Buildathon Criteria
 
 | Criteria | Weight | SovereignDesk Alignment |
 |---|---|---|
@@ -264,12 +264,12 @@ How does a single operator turn SovereignDesk into a high-margin on-chain busine
 
 ---
 
-## 🚀 9. Getting Started / Verification
+## ðŸš€ 9. Getting Started / Verification
 
 To run and verify the SovereignDesk terminal locally:
 1. Open Google Chrome or any modern browser.
 2. Navigate to:  
-   `file:///C:/Mehd%20ai/hackathons/sosovalue/index.html`
+   `file:///https://amazing200guy1-a11y.github.io/sovereigndesk/index.html`
 3. Test all five interactive tabs:
    - Adjust the **Portfolio Equity slider** to see real-time VaR and lot sizing recalibrate.
    - Click the **ETF Inflow Shock buttons** to test anomaly detection.
@@ -278,3 +278,5 @@ To run and verify the SovereignDesk terminal locally:
 
 ---
 *Architected & Submitted by Usman for the SoSoValue & Akindo Buildathon 2026.*
+
+
