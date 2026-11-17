@@ -133,15 +133,18 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 20px 0 16px;
+      padding: 18px 0 16px;
       border-bottom: 1px solid var(--border);
       margin-bottom: 24px;
+      gap: 16px;
+      flex-wrap: wrap;
     }
 
     .brand-group {
       display: flex;
       align-items: center;
       gap: 12px;
+      flex-shrink: 0;
     }
 
     .brand-crest {
@@ -155,6 +158,7 @@
       justify-content: center;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(200, 220, 240, 0.18);
       color: var(--ice);
+      flex-shrink: 0;
     }
 
     .brand-name {
@@ -163,6 +167,7 @@
       font-weight: 900;
       letter-spacing: -0.4px;
       color: #fff;
+      white-space: nowrap;
     }
 
     .brand-name span {
@@ -174,11 +179,15 @@
       font-size: 9px;
       font-weight: 700;
       color: var(--text-slate);
-      padding: 2px 7px;
+      padding: 3px 8px;
       background: var(--bg-tray);
       border: 1px solid var(--border);
       border-radius: 4px;
-      letter-spacing: 1px;
+      letter-spacing: 0.8px;
+      white-space: nowrap;
+      flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
     }
 
     /* Navigation Tabs */
@@ -189,7 +198,8 @@
       padding: 4px;
       border: 1px solid var(--border);
       border-radius: var(--radius-md);
-      gap: 4px;
+      gap: 3px;
+      flex-shrink: 0;
     }
 
     .nav-tab-btn {
@@ -197,17 +207,18 @@
       border: 1px solid transparent;
       color: var(--text-slate);
       font-family: var(--font-ui);
-      font-size: 12px;
+      font-size: 11.5px;
       font-weight: 700;
-      letter-spacing: 0.3px;
-      padding: 6px 14px;
+      letter-spacing: 0.2px;
+      padding: 6px 12px;
       border-radius: var(--radius-sm);
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 7px;
+      gap: 6px;
       transition: all var(--transition);
       white-space: nowrap;
+      flex-shrink: 0;
     }
 
     .nav-tab-btn:hover {
@@ -229,23 +240,26 @@
     .nav-telemetry {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
+      flex-shrink: 0;
     }
 
     .titanium-pill {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      padding: 5px 12px;
+      gap: 7px;
+      padding: 5px 10px;
       background: var(--pill-bg);
       border: 1px solid var(--pill-border);
       border-radius: var(--radius-sm);
       font-family: var(--font-mono);
       font-size: 10px;
       font-weight: 700;
-      letter-spacing: 1px;
+      letter-spacing: 0.8px;
       color: var(--pill-text);
       box-shadow: inset 0 1px 0 rgba(200, 220, 240, 0.14), 0 2px 6px rgba(0,0,0,0.4);
+      white-space: nowrap;
+      flex-shrink: 0;
     }
 
     .pill-dot-emerald {
@@ -781,8 +795,9 @@
       background: linear-gradient(180deg, var(--card-top) 0%, var(--card-mid) 50%, var(--card-base) 100%);
       border: 1px solid var(--border);
       border-radius: var(--radius-md);
-      overflow: hidden;
+      overflow-x: auto;
       box-shadow: var(--shadow);
+      -webkit-overflow-scrolling: touch;
     }
 
     .telemetry-table {
@@ -802,12 +817,14 @@
       text-transform: uppercase;
       font-size: 9px;
       border-bottom: 1px solid var(--border);
+      white-space: nowrap;
     }
 
     .telemetry-table td {
       padding: 12px 16px;
       border-bottom: 1px solid rgba(200, 220, 240, 0.05);
       color: var(--platinum);
+      white-space: nowrap;
     }
 
     .telemetry-table tr:hover td {
@@ -837,7 +854,36 @@
       color: #FFF;
     }
 
+    @media (max-width: 1260px) {
+      .top-nav {
+        gap: 12px;
+      }
+      .nav-tabs {
+        order: 3;
+        width: 100%;
+        justify-content: flex-start;
+        overflow-x: auto;
+        padding: 5px;
+        -webkit-overflow-scrolling: touch;
+      }
+      .nav-telemetry {
+        order: 2;
+        margin-left: auto;
+      }
+    }
+
     @media (max-width: 900px) {
+      .top-nav {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .brand-group {
+        justify-content: space-between;
+      }
+      .nav-telemetry {
+        margin-left: 0;
+        justify-content: space-between;
+      }
       .cockpit-metrics-grid { grid-template-columns: repeat(2, 1fr); }
       .pipeline-grid { grid-template-columns: 1fr; }
       .cockpit-main-deck { grid-template-columns: 1fr; }
@@ -858,7 +904,7 @@
       <div>
         <div class="brand-name">SOVEREIGN<span>DESK</span></div>
       </div>
-      <div class="brand-code">QUANT KERNEL // SPEC v1.4</div>
+      <div class="brand-code">QUANT KERNEL v1.4</div>
     </div>
 
     <!-- 5 Institutional Tabs -->
@@ -869,15 +915,15 @@
       </button>
       <button class="nav-tab-btn" onclick="switchTab('var')">
         <svg class="ico" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-        VaR &amp; CVaR Risk
+        VaR &amp; CVaR
       </button>
       <button class="nav-tab-btn" onclick="switchTab('etf')">
         <svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v12m-3-6h6"/></svg>
-        SoSoValue ETF Telemetry
+        ETF Telemetry
       </button>
       <button class="nav-tab-btn" onclick="switchTab('ai-sieve')">
         <svg class="ico" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        Token Pruner &amp; Firewall
+        Token Firewall
       </button>
       <button class="nav-tab-btn" onclick="switchTab('economics')">
         <svg class="ico" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
@@ -888,11 +934,11 @@
     <div class="nav-telemetry">
       <div class="titanium-pill">
         <span class="pill-dot-emerald"></span>
-        SOSOVALUE v1.4 API
+        SOSOVALUE v1.4
       </div>
       <div class="titanium-pill">
         <span class="pill-dot-ice"></span>
-        LATENCY: 0.0004ms
+        0.0004ms LATENCY
       </div>
     </div>
   </nav>
