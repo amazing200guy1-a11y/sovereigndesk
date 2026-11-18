@@ -145,7 +145,7 @@ class SovereignDeskEngine:
         raw_agent_prompt: str
     ) -> Tuple[str, int, int, float]:
         """
-        Solves the LLM token burn crisis (e.g. Grok / autonomous trader loop burnout).
+        Solves the LLM token burn crisis (autonomous trading agent loop burnout).
         Extracts structured quantitative primitives (pair, action, size, stop_loss)
         and prunes conversational noise by 90%+ before calling any frontier model.
         Returns: (compact_payload, raw_tokens, pruned_tokens, reduction_pct)

@@ -101,9 +101,9 @@ class TestSovereignDeskFormalInvariants(unittest.TestCase):
     def test_10_ai_token_pruning_optimization(self):
         """Invariant 10: Quantitative parser prunes raw conversational prompt by > 80%."""
         verbose_prompt = (
-            "Hey Grok agent, please look at the market right now and execute a BUY order "
-            "for 500,000 USD of Bitcoin BTC on ValueChain DEX with a stop-loss at 1.5% "
-            "because the macro ETF inflow just surged according to SoSoValue telemetry."
+            "Autonomous Market Agent evaluating real-time order execution. Please look at current market feeds "
+            "and execute a BUY order for 500,000 USD of Bitcoin BTC on ValueChain DEX with a stop-loss at 1.5% "
+            "because institutional Spot ETF net inflows just surged according to SoSoValue telemetry."
         )
         compact, raw_tok, pruned_tok, reduction = self.engine.prune_agent_prompt_tokens(verbose_prompt)
         self.assertIn("ACTION:BUY", compact)
