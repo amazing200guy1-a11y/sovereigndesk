@@ -57,25 +57,36 @@ SovereignDesk natively integrates into the core SoSoValue and ValueChain ecosyst
 
 ---
 
-## 🏎️ Formal Verification & Latency Benchmark (13/13 Passing)
+## 🏎️ Verifying the Backend Engine & Running Tests Locally
 
-Run the full formal verification suite locally:
+Technical judges can directly verify the mathematical engine, SoSoValue ETF macro telemetry, and smart contract invariants locally with **zero external dependencies** (pure Python 3 standard library):
+
+### 1. Run the Formal Invariant Test Suite (13/13 Passing):
 ```bash
 git clone https://github.com/amazing200guy1-a11y/sovereigndesk.git
 cd sovereigndesk
 python test_sovereigndesk.py
 ```
-
-### Benchmark Results:
+*Expected Output:*
 ```text
 .............
 ----------------------------------------------------------------------
 Ran 13 tests in 0.003s
 
 OK
-
 [BENCHMARK] 2000 SovereignDesk Invariant Operations: 0.0009s | Avg Latency: 0.0004 ms/operation (Float64 Vectorized)
 ```
+
+### 2. Run the Quantitative Risk Engine CLI:
+```bash
+python sovereigndesk_engine.py
+```
+*Executes the real-time VaR/CVaR calculation, SoSoValue ETF macro beta correlation (+0.814), the 91.4% LLM prompt token pruner, and the autonomous 3.0% drawdown circuit breaker simulation in terminal.*
+
+### 3. Live & Fallback SoSoValue Telemetry Ingestion Architecture:
+* **Live Ingestion Endpoint:** `https://api.sosovalue.xyz/v1/etf/btc/inflow` and `/v1/index/ssi`
+* **Zero-Failure Fallback:** Located in `sovereigndesk_engine.py` under `fetch_sosovalue_etf_feed()`. When query limits or offline test environments occur, the engine loads verified normalized institutional time-series records (BlackRock IBIT, Fidelity FBTC, Grayscale GBTC) to calculate rolling Pearson correlation without API key rate-limit crashes.
+* **Smart Vault Layer:** `contracts/SovereignVault.sol` is written in standard Solidity (^0.8.20) for ValueChain L1 EVM deployment, enforcing an immutable 300 bps (3.0%) hard drawdown halt.
 
 ---
 
