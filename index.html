@@ -1122,16 +1122,16 @@
         </div>
 
         <div class="pipeline-card" id="card-sovereign-node3" onclick="inspectSovereign('breaker')">
-          <div class="node-step-tag">ENCLAVE 03 // VALUECHAIN SMART VAULT</div>
+          <div class="node-step-tag">ENCLAVE 03 // VALUECHAIN L1 &amp; SoDEX</div>
           <div class="node-title">
             SovereignVault.sol
-            <span class="hud-badge-platinum">ON-CHAIN EVM</span>
+            <span class="hud-badge-platinum">VALUECHAIN EVM</span>
           </div>
-          <div class="node-sub">Non-custodial smart vault halting execution upon 3.0% maximum portfolio drawdown.</div>
+          <div class="node-sub">Non-custodial smart vault with 3.0% drawdown circuit breaker and automated execution routing to SoDEX &amp; SSI index baskets.</div>
           <div class="node-metrics">
             <div class="node-metric-row"><span>Drawdown Cap</span><span style="color:var(--amber);">300 bps (3.0%)</span></div>
-            <div class="node-metric-row"><span>1-Trade Loss Cap</span><span>100 bps (1.0%)</span></div>
-            <div class="node-metric-row"><span>Solidity Spec</span><span>^0.8.20 Immutable</span></div>
+            <div class="node-metric-row"><span>Execution Router</span><span style="color:var(--soso-cyan);">SoDEX &amp; SSI Baskets</span></div>
+            <div class="node-metric-row"><span>Native L1 Chain</span><span>ValueChain (^0.8.20)</span></div>
           </div>
         </div>
       </div>
@@ -1156,7 +1156,7 @@
         <div class="cockpit-terminal-screen" id="sovereignTerm">
           <div class="line-dim">[SYS_BOOT] SovereignDesk Institutional Risk Copilot initialized.</div>
           <div class="line-dim">[API_MOUNT] SoSoValue Open Platform connected: /v1/etf/btc/inflow | /v1/index/ssi</div>
-          <div class="line-dim">[SMART_VAULT] ValueChain SovereignVault.sol mounted with 3.0% hard drawdown lock.</div>
+          <div class="line-dim">[SMART_VAULT] ValueChain L1 SovereignVault.sol mounted with native SoDEX routing &amp; 3.0% hard drawdown lock.</div>
           <div class="line-dim">--------------------------------------------------------------------------------</div>
           <div class="line-white">[FORMAL_VERIFICATION] 13/13 Mathematical Invariant Tests PASSED in 0.002s (0.0004 ms/op via Float64 pre-allocated memory buffers).</div>
           <div class="line-cyan">  -> Invariant 1: Parametric 99.0% VaR &amp; CVaR Tail Monotonicity [PROVED]</div>
@@ -1594,7 +1594,7 @@
       appendSovereignLog('line-emerald', '[INSPECT] Enclave 02: Zero-Hallucination Sieve active. 91.4% prompt token burn eliminated. Latency: 0.0004ms.');
     } else if (node === 'breaker') {
       document.getElementById('card-sovereign-node3').classList.add('active-node');
-      appendSovereignLog('line-amber', '[INSPECT] Enclave 03: ValueChain SovereignVault.sol armed. 3.0% hard drawdown circuit breaker active.');
+      appendSovereignLog('line-amber', '[INSPECT] Enclave 03: ValueChain L1 SovereignVault.sol armed. 3.0% drawdown halt & SoDEX router active.');
     }
   }
 
