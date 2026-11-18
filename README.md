@@ -7,6 +7,7 @@
 [![Float64 Wasm](https://img.shields.io/badge/Float64-Pre--Allocated%20Buffers-success.svg)](index.html)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 [![Live Cockpit](https://img.shields.io/badge/Live%20Cockpit-Online-success.svg)](https://amazing200guy1-a11y.github.io/sovereigndesk/)
+[![Demo Video](https://img.shields.io/badge/YouTube-Demo%20Walkthrough-FF0000.svg)](https://youtu.be/Xit_kvX1Zww)
 
 > **SovereignDesk** is an autonomous institutional risk operating system that empowers a single quantitative operator to manage a **$10M–$100M on-chain fund with a 98.9% net operating margin**. Built for the **SoSoValue "Build Your One-Person On-Chain Finance Business" Buildathon on Akindo**, it bridges SoSoValue's macroeconomic ETF flow telemetry with native **ValueChain L1 smart vaults**, **SoDEX execution routing**, and sub-millisecond quantitative risk kernels.
 
@@ -95,8 +96,9 @@ sovereigndesk/
 
 ---
 
-## 🌐 Live Interactive Financial Cockpit
-👉 **[https://amazing200guy1-a11y.github.io/sovereigndesk/](https://amazing200guy1-a11y.github.io/sovereigndesk/)**
+## 🌐 Live Interactive Financial Cockpit & Demo Walkthrough
+👉 **Interactive Cockpit:** [https://amazing200guy1-a11y.github.io/sovereigndesk/](https://amazing200guy1-a11y.github.io/sovereigndesk/)  
+🎥 **YouTube Walkthrough:** [https://youtu.be/Xit_kvX1Zww](https://youtu.be/Xit_kvX1Zww)
 
 ---
 
